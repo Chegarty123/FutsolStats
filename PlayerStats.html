@@ -6,83 +6,94 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #0f172a;
+      font-family: "PremierSans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+      background: linear-gradient(135deg, #38003c 0%, #00ff85 100%);
       margin: 0;
       padding: 2rem 1rem;
-      color: #e5e7eb;
+      color: #ffffff;
       display: flex;
       justify-content: center;
+      min-height: 100vh;
     }
     .container {
       width: 100%;
-      max-width: 800px;
-      background: #020617;
-      border-radius: 16px;
-      padding: 1.5rem;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-      border: 1px solid #1f2937;
+      max-width: 1000px;
+      background: #ffffff;
+      border-radius: 0;
+      padding: 0;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.2);
+      border: none;
     }
     h1 {
-      margin-top: 0;
-      text-align: center;
-      letter-spacing: 0.08em;
+      margin: 0;
+      padding: 1.5rem 2rem;
+      text-align: left;
+      letter-spacing: -0.02em;
       text-transform: uppercase;
-      font-size: 1.5rem;
+      font-size: 2rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, #38003c 0%, #e90052 100%);
+      color: #ffffff;
+      border-bottom: 4px solid #00ff85;
     }
     .subtitle {
       text-align: center;
-      margin-bottom: 1.25rem;
+      margin-bottom: 0;
+      padding: 1rem 2rem;
       font-size: 0.9rem;
-      color: #9ca3af;
+      color: #38003c;
+      background: #f4f4f4;
+      border-bottom: 1px solid #e0e0e0;
+      font-weight: 600;
     }
     .table-wrapper {
       overflow-x: auto;
-      border-radius: 12px;
-      border: 1px solid #1f2937;
-      background: radial-gradient(circle at top left, #1e293b, #020617);
+      border-radius: 0;
+      border: none;
+      background: #ffffff;
     }
     table {
       width: 100%;
       border-collapse: collapse;
-      min-width: 500px;
+      min-width: 600px;
     }
     thead {
-      background: rgba(15,23,42,0.95);
+      background: #38003c;
       position: sticky;
       top: 0;
       z-index: 1;
     }
     th, td {
-      padding: 0.75rem 0.9rem;
+      padding: 1rem 1.25rem;
       text-align: left;
       font-size: 0.9rem;
-      border-bottom: 1px solid rgba(31,41,55,0.7);
+      border-bottom: 1px solid #e0e0e0;
       white-space: nowrap;
     }
     td:first-child {
-      font-weight: 500;
-      color: #e5e7eb;
+      font-weight: 700;
+      color: #38003c;
+      font-size: 0.95rem;
     }
     .rank {
       display: inline-block;
-      width: 1.8rem;
-      height: 1.8rem;
+      width: 2rem;
+      height: 2rem;
       border-radius: 50%;
-      background: rgba(59,130,246,0.2);
-      border: 1px solid rgba(59,130,246,0.5);
-      color: #60a5fa;
+      background: #e90052;
+      border: none;
+      color: #ffffff;
       text-align: center;
-      line-height: 1.8rem;
-      font-size: 0.75rem;
-      font-weight: 600;
-      margin-right: 0.5rem;
+      line-height: 2rem;
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-right: 0.75rem;
     }
     .rank.top3 {
-      background: rgba(251,191,36,0.2);
-      border-color: rgba(251,191,36,0.5);
-      color: #fbbf24;
-      font-weight: 700;
+      background: #00ff85;
+      color: #38003c;
+      font-weight: 900;
+      font-size: 0.9rem;
     }
     .player-cell {
       display: flex;
@@ -90,65 +101,91 @@
     }
     .team-badge {
       display: inline-block;
-      padding: 0.2rem 0.6rem;
+      padding: 0.3rem 0.75rem;
       border-radius: 4px;
-      font-size: 0.7rem;
-      font-weight: 600;
+      font-size: 0.75rem;
+      font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
-    .team-red { background: rgba(239,68,68,0.2); color: #fca5a5; border: 1px solid rgba(239,68,68,0.4); }
-    .team-blue { background: rgba(59,130,246,0.2); color: #93c5fd; border: 1px solid rgba(59,130,246,0.4); }
-    .team-black { background: rgba(156,163,175,0.2); color: #d1d5db; border: 1px solid rgba(156,163,175,0.4); }
-    .team-white { background: rgba(243,244,246,0.2); color: #f3f4f6; border: 1px solid rgba(243,244,246,0.4); }
+    .team-red { background: #e90052; color: #ffffff; border: none; }
+    .team-blue { background: #38003c; color: #ffffff; border: none; }
+    .team-black { background: #000000; color: #ffffff; border: none; }
+    .team-white { background: #ffffff; color: #38003c; border: 2px solid #38003c; }
     .stat-number {
       text-align: center;
       font-variant-numeric: tabular-nums;
-      font-weight: 500;
+      font-weight: 700;
+      color: #38003c;
+      font-size: 0.95rem;
     }
     .stat-highlight {
-      color: #22c55e;
-      font-weight: 600;
+      color: #e90052;
+      font-weight: 900;
+      font-size: 1.1rem;
     }
     th {
-      font-weight: 600;
+      font-weight: 700;
       text-transform: uppercase;
       font-size: 0.75rem;
-      letter-spacing: 0.08em;
-      color: #9ca3af;
+      letter-spacing: 0.1em;
+      color: #ffffff;
       text-align: center;
+      padding: 1rem 1.25rem;
     }
     th:first-child {
       text-align: left;
     }
+    tbody tr {
+      background: #ffffff;
+      transition: background 0.2s ease;
+    }
     tbody tr:nth-child(even) {
-      background: rgba(15,23,42,0.65);
+      background: #f9f9f9;
     }
     tbody tr:hover {
-      background: rgba(56,189,248,0.12);
+      background: #f0e6ff;
+    }
+    tbody tr:first-child {
+      background: linear-gradient(90deg, rgba(0, 255, 133, 0.15), rgba(255, 255, 255, 0));
+    }
+    tbody tr:first-child td {
+      border-top: 3px solid #00ff85;
+    }
+    tbody tr:nth-child(2) {
+      background: linear-gradient(90deg, rgba(0, 255, 133, 0.1), rgba(255, 255, 255, 0));
+    }
+    tbody tr:nth-child(3) {
+      background: linear-gradient(90deg, rgba(0, 255, 133, 0.05), rgba(255, 255, 255, 0));
     }
     .badge {
       display: inline-block;
-      padding: 0.15rem 0.5rem;
-      border-radius: 999px;
+      padding: 0.25rem 0.75rem;
+      border-radius: 4px;
       font-size: 0.7rem;
       text-transform: uppercase;
-      letter-spacing: 0.08em;
-      background: rgba(34,197,94,0.15);
-      border: 1px solid rgba(34,197,94,0.5);
-      color: #bbf7d0;
+      letter-spacing: 0.1em;
+      background: #e90052;
+      border: none;
+      color: #ffffff;
+      font-weight: 700;
     }
     .footer {
-      margin-top: 0.75rem;
-      font-size: 0.75rem;
-      color: #6b7280;
+      margin-top: 0;
+      padding: 1rem 2rem;
+      font-size: 0.8rem;
+      color: #666666;
       text-align: right;
+      background: #f4f4f4;
+      border-top: 1px solid #e0e0e0;
+      font-weight: 600;
     }
     .error {
-      margin-top: 1rem;
-      color: #fca5a5;
-      font-size: 0.85rem;
+      margin: 1rem 2rem;
+      color: #e90052;
+      font-size: 0.9rem;
       text-align: center;
+      font-weight: 600;
     }
   </style>
 </head>

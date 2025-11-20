@@ -11,10 +11,10 @@
       box-sizing: border-box;
     }
     body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      font-family: "PremierSans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+      background: linear-gradient(135deg, #38003c 0%, #00ff85 100%);
       min-height: 100vh;
-      color: #e5e7eb;
+      color: #ffffff;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -22,66 +22,73 @@
     }
     .container {
       width: 100%;
-      max-width: 900px;
+      max-width: 1000px;
       text-align: center;
     }
     .hero {
       margin-bottom: 3rem;
+      padding: 2rem;
+      background: rgba(56, 0, 60, 0.6);
+      border-radius: 8px;
+      backdrop-filter: blur(10px);
     }
     .logo {
-      width: 80px;
-      height: 80px;
+      width: 100px;
+      height: 100px;
       margin: 0 auto 1.5rem;
-      background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+      background: linear-gradient(135deg, #e90052 0%, #38003c 100%);
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 2.5rem;
-      box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
+      font-size: 3rem;
+      box-shadow: 0 8px 32px rgba(233, 0, 82, 0.4);
+      border: 3px solid #ffffff;
     }
     h1 {
-      font-size: 3rem;
-      font-weight: 700;
-      letter-spacing: -0.02em;
+      font-size: 3.5rem;
+      font-weight: 900;
+      letter-spacing: -0.03em;
       margin-bottom: 0.75rem;
-      background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 50%, #2563eb 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      color: #ffffff;
+      text-transform: uppercase;
+      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
     }
     .subtitle {
-      font-size: 1.1rem;
-      color: #9ca3af;
+      font-size: 1.2rem;
+      color: #ffffff;
       margin-bottom: 0.5rem;
+      font-weight: 500;
+      opacity: 0.95;
     }
     .season-badge {
       display: inline-block;
-      padding: 0.4rem 1rem;
-      background: rgba(34,197,94,0.15);
-      border: 1px solid rgba(34,197,94,0.5);
-      border-radius: 999px;
-      font-size: 0.85rem;
+      padding: 0.5rem 1.5rem;
+      background: #e90052;
+      border-radius: 4px;
+      font-size: 0.9rem;
       text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: #bbf7d0;
-      margin-top: 0.75rem;
+      letter-spacing: 0.1em;
+      color: #ffffff;
+      margin-top: 1rem;
+      font-weight: 700;
+      box-shadow: 0 4px 12px rgba(233, 0, 82, 0.4);
     }
     .nav-cards {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
       margin-bottom: 2rem;
     }
     .nav-card {
-      background: #020617;
-      border: 1px solid #1f2937;
-      border-radius: 16px;
-      padding: 2rem 1.5rem;
+      background: #ffffff;
+      border: none;
+      border-radius: 4px;
+      padding: 2.5rem 2rem;
       text-decoration: none;
-      color: inherit;
+      color: #38003c;
       transition: all 0.3s ease;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
       position: relative;
       overflow: hidden;
     }
@@ -91,8 +98,8 @@
       top: 0;
       left: 0;
       right: 0;
-      height: 4px;
-      background: linear-gradient(90deg, #3b82f6, #60a5fa);
+      height: 6px;
+      background: linear-gradient(90deg, #e90052, #38003c);
       transform: scaleX(0);
       transition: transform 0.3s ease;
     }
@@ -100,67 +107,71 @@
       transform: scaleX(1);
     }
     .nav-card:hover {
-      transform: translateY(-5px);
-      border-color: #3b82f6;
-      box-shadow: 0 10px 40px rgba(59, 130, 246, 0.2);
+      transform: translateY(-8px);
+      box-shadow: 0 12px 40px rgba(233, 0, 82, 0.3);
     }
     .nav-card-icon {
-      width: 60px;
-      height: 60px;
-      margin: 0 auto 1.25rem;
-      background: rgba(59,130,246,0.15);
-      border: 2px solid rgba(59,130,246,0.3);
-      border-radius: 12px;
+      width: 70px;
+      height: 70px;
+      margin: 0 auto 1.5rem;
+      background: linear-gradient(135deg, #e90052, #38003c);
+      border-radius: 8px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.75rem;
+      font-size: 2rem;
       transition: all 0.3s ease;
     }
     .nav-card:hover .nav-card-icon {
-      background: rgba(59,130,246,0.25);
-      border-color: rgba(59,130,246,0.6);
-      transform: scale(1.1);
+      transform: scale(1.1) rotate(5deg);
     }
     .nav-card h2 {
-      font-size: 1.5rem;
-      margin-bottom: 0.75rem;
-      color: #e5e7eb;
+      font-size: 1.75rem;
+      margin-bottom: 1rem;
+      color: #38003c;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
     }
     .nav-card p {
-      color: #9ca3af;
-      font-size: 0.95rem;
+      color: #38003c;
+      font-size: 1rem;
       line-height: 1.6;
+      opacity: 0.8;
+      font-weight: 500;
     }
     .footer {
       margin-top: 3rem;
       padding-top: 2rem;
-      border-top: 1px solid #1f2937;
+      border-top: 2px solid rgba(255, 255, 255, 0.2);
     }
     .footer-content {
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 1.5rem;
+      gap: 2rem;
       flex-wrap: wrap;
-      font-size: 0.85rem;
-      color: #6b7280;
+      font-size: 0.9rem;
+      color: #ffffff;
     }
     .footer-badge {
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
-      padding: 0.5rem 1rem;
-      background: rgba(15,23,42,0.8);
-      border: 1px solid #1f2937;
-      border-radius: 8px;
+      padding: 0.6rem 1.2rem;
+      background: rgba(56, 0, 60, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 4px;
+      backdrop-filter: blur(10px);
+      font-weight: 600;
     }
     .status-dot {
-      width: 8px;
-      height: 8px;
-      background: #22c55e;
+      width: 10px;
+      height: 10px;
+      background: #00ff85;
       border-radius: 50%;
       animation: pulse 2s infinite;
+      box-shadow: 0 0 8px #00ff85;
     }
     @keyframes pulse {
       0%, 100% { opacity: 1; }
@@ -168,7 +179,7 @@
     }
     @media (max-width: 640px) {
       h1 {
-        font-size: 2rem;
+        font-size: 2.5rem;
       }
       .subtitle {
         font-size: 1rem;
@@ -183,7 +194,7 @@
   <div class="container">
     <div class="hero">
       <div class="logo">⚽</div>
-      <h1>JP's Futsal League</h1>
+      <h1>Iona Futsal League</h1>
       <p class="subtitle">Your hub for live stats, standings, and player rankings</p>
       <span class="season-badge">Season 2024-25</span>
     </div>
