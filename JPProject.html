@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>League Stats</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #0f172a;
+      margin: 0;
+      padding: 2rem 1rem;
+      color: #e5e7eb;
+      display: flex;
+      justify-content: center;
+    }
+    .container {
+      width: 100%;
+      max-width: 1000px;
+      background: #020617;
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+      border: 1px solid #1f2937;
+    }
+    h1 {
+      margin-top: 0;
+      text-align: center;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 1.5rem;
+    }
+    .subtitle {
+      text-align: center;
+      margin-bottom: 1.25rem;
+      font-size: 0.9rem;
+      color: #9ca3af;
+    }
+    .table-wrapper {
+      overflow-x: auto;
+      border-radius: 12px;
+      border: 1px solid #1f2937;
+      background: radial-gradient(circle at top left, #1e293b, #020617);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 500px;
+    }
+    thead {
+      background: rgba(15,23,42,0.95);
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+    th, td {
+      padding: 0.75rem 0.9rem;
+      text-align: left;
+      font-size: 0.9rem;
+      border-bottom: 1px solid rgba(31,41,55,0.7);
+      white-space: nowrap;
+    }
+    td:first-child {
+      font-weight: 600;
+      color: #60a5fa;
+      text-align: center;
+    }
+    .club-name {
+      font-weight: 500;
+      color: #e5e7eb;
+    }
+    .stat-number {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+    .form-indicator {
+      display: inline-block;
+      width: 1.2rem;
+      height: 1.2rem;
+      border-radius: 2px;
+      text-align: center;
+      line-height: 1.2rem;
+      font-size: 0.7rem;
+      font-weight: 600;
+      margin: 0 1px;
+    }
+    .form-w { background: #22c55e; color: #000; }
+    .form-d { background: #eab308; color: #000; }
+    .form-l { background: #ef4444; color: #fff; }
+    th {
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      color: #9ca3af;
+    }
+    tbody tr:nth-child(even) {
+      background: rgba(15,23,42,0.65);
+    }
+    tbody tr:hover {
+      background: rgba(56,189,248,0.12);
+    }
+    .badge {
+      display: inline-block;
+      padding: 0.15rem 0.5rem;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      background: rgba(34,197,94,0.15);
+      border: 1px solid rgba(34,197,94,0.5);
+      color: #bbf7d0;
+    }
+    .footer {
+      margin-top: 0.75rem;
+      font-size: 0.75rem;
+      color: #6b7280;
+      text-align: right;
+    }
+    .error {
+      margin-top: 1rem;
+      color: #fca5a5;
+      font-size: 0.85rem;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>League Stats</h1>
+    <p class="subtitle">
+      Live stats synced from the league spreadsheet
+      <span class="badge">Auto-updating</span>
+    </p>
+
+    <div class="table-wrapper">
+      <table id="stats-table">
+        <thead></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <p class="footer" id="last-updated"></p>
+    <p class="error" id="error-message"></p>
+  </div>
+
+  <script>
+    const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR2zHnWn0w2AZ2TpbBniTby96VlZuU0pwk35nUD1XFmoRd8eVHLUaQd3To1a0c-jQ/pub?gid=850902682&single=true&output=csv"; // <- paste your published CSV link here
+
+    async function loadStats() {
+      const errorEl = document.getElementById("error-message");
+      const tableHead = document.querySelector("#stats-table thead");
+      const tableBody = document.querySelector("#stats-table tbody");
+      const lastUpdatedEl = document.getElementById("last-updated");
+
+      errorEl.textContent = "";
+      tableHead.innerHTML = "";
+      tableBody.innerHTML = "";
+
+      try {
+        // Use a CORS proxy to avoid cross-origin issues when opening file locally
+        const proxyUrl = "https://api.allorigins.win/raw?url=";
+        const fullUrl = proxyUrl + encodeURIComponent(CSV_URL + "&t=" + Date.now());
+
+        const response = await fetch(fullUrl);
+        if (!response.ok) {
+          throw new Error("Network response was not ok (Status: " + response.status + ")");
+        }
+        const csvText = await response.text();
+
+        // Simple CSV parsing assuming no commas inside values
+        const rows = csvText
+          .trim()
+          .split("\n")
+          .map(row => row.split(","));
+
+        if (rows.length === 0) {
+          errorEl.textContent = "No data found in the sheet.";
+          return;
+        }
+
+        const headers = rows[0];
+        const dataRows = rows.slice(1);
+
+        // Build header row
+        const headerRow = document.createElement("tr");
+        headers.forEach(h => {
+          const th = document.createElement("th");
+          th.textContent = h.trim();
+          headerRow.appendChild(th);
+        });
+        tableHead.appendChild(headerRow);
+
+        // Build data rows
+        dataRows.forEach(row => {
+          if (row.length === 1 && row[0].trim() === "") return; // skip empty
+          const tr = document.createElement("tr");
+          row.forEach((cell, index) => {
+            const td = document.createElement("td");
+            let value = cell.trim();
+            const header = headers[index].trim().toLowerCase();
+
+            // Position column (first column) - already styled via CSS
+            if (index === 0) {
+              td.textContent = value;
+            }
+            // Club column (second column)
+            else if (index === 1) {
+              td.className = "club-name";
+              td.textContent = value;
+            }
+            // Form column (last column) - display as colored indicators
+            else if (header === "form" || header === "last 5") {
+              const formChars = value.split("");
+              formChars.forEach(char => {
+                const span = document.createElement("span");
+                span.className = "form-indicator";
+                const upperChar = char.toUpperCase();
+                if (upperChar === "W") span.className += " form-w";
+                else if (upperChar === "D") span.className += " form-d";
+                else if (upperChar === "L") span.className += " form-l";
+                span.textContent = upperChar;
+                td.appendChild(span);
+              });
+            }
+            // Number columns - align right
+            else if (!isNaN(value) && value !== "") {
+              td.className = "stat-number";
+              td.textContent = value;
+            }
+            // Other columns
+            else {
+              td.textContent = value;
+            }
+
+            tr.appendChild(td);
+          });
+          tableBody.appendChild(tr);
+        });
+
+        const now = new Date();
+        lastUpdatedEl.textContent =
+          "Last refreshed: " + now.toLocaleString();
+
+      } catch (err) {
+        console.error("Detailed error:", err);
+        errorEl.textContent =
+          "Error: " + err.message + " - Check your CSV link and sharing settings. See console for details.";
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", loadStats);
+  </script>
+</body>
+</html>
