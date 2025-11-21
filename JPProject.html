@@ -5,156 +5,227 @@
   <title>League Stats</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
+    :root {
+      --bg-deep: #050014;
+      --bg-mid: #1a0030;
+      --bg-top: #38003c;
+      --accent: #e90052;
+      --accent-soft: #ff4fa3;
+      --table-header: #ff0a84;
+      --row-even: #17002a;
+      --row-odd: #21003d;
+      --row-hover: #3a005a;
+      --text-main: #ffffff;
+    }
+
     body {
-      font-family: "PremierSans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
-      background: linear-gradient(135deg, #38003c 0%, #00ff85 100%);
+      font-family: "PremierSans", -apple-system, BlinkMacSystemFont, "Segoe UI",
+        "Helvetica Neue", Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, #5b008f 0, transparent 40%),
+        radial-gradient(circle at bottom right, #ff007f33 0, transparent 55%),
+        linear-gradient(135deg, var(--bg-top) 0%, var(--bg-deep) 60%, #000000 100%);
       margin: 0;
-      padding: 2rem 1rem;
-      color: #ffffff;
+      padding: 2.5rem 1.25rem;
+      color: var(--text-main);
       display: flex;
       justify-content: center;
       min-height: 100vh;
     }
+
     .container {
       width: 100%;
       max-width: 1200px;
-      background: #ffffff;
-      border-radius: 0;
+      background: rgba(10, 0, 30, 0.96);
+      border-radius: 16px;
       padding: 0;
-      box-shadow: 0 8px 40px rgba(0,0,0,0.2);
-      border: none;
+      box-shadow: 0 22px 70px rgba(0, 0, 0, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      overflow: hidden;
     }
+
     h1 {
       margin: 0;
-      padding: 1.5rem 2rem;
+      padding: 1.6rem 2rem;
       text-align: left;
-      letter-spacing: -0.02em;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
-      font-size: 2rem;
+      font-size: 1.9rem;
       font-weight: 900;
-      background: linear-gradient(135deg, #38003c 0%, #e90052 100%);
+      background: linear-gradient(135deg, var(--table-header), var(--bg-top));
       color: #ffffff;
-      border-bottom: 4px solid #00ff85;
+      border-bottom: 3px solid #ffd4f0;
     }
+
     .subtitle {
-      text-align: center;
-      margin-bottom: 0;
-      padding: 1rem 2rem;
+      text-align: left;
+      padding: 0.9rem 2rem 1.1rem;
       font-size: 0.9rem;
-      color: #38003c;
-      background: #f4f4f4;
-      border-bottom: 1px solid #e0e0e0;
+      color: #f8def9;
+      background: rgba(10, 0, 30, 0.92);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
       font-weight: 600;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
     }
+
+    .badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      background: #21003d;
+      color: #ffd4f0;
+      border: 1px solid rgba(255, 255, 255, 0.35);
+    }
+
     .table-wrapper {
       overflow-x: auto;
-      border-radius: 0;
-      border: none;
-      background: #ffffff;
+      background: transparent;
     }
+
     table {
       width: 100%;
       border-collapse: collapse;
       min-width: 600px;
     }
+
     thead {
-      background: #38003c;
+      background: var(--table-header);
       position: sticky;
       top: 0;
       z-index: 1;
     }
-    th, td {
-      padding: 1rem 1.25rem;
-      text-align: left;
-      font-size: 0.9rem;
-      border-bottom: 1px solid #e0e0e0;
-      white-space: nowrap;
-    }
-    td:first-child {
-      font-weight: 700;
-      color: #38003c;
+
+    th,
+    td {
+      padding: 0.9rem 1.2rem;
       text-align: center;
-      font-size: 1rem;
-      background: #f9f9f9;
+      font-size: 0.88rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      white-space: nowrap;
+      color: #f9e8ff;
     }
+
+    th {
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      color: #ffffff;
+    }
+
+    td:first-child,
+    th:first-child {
+      text-align: center;
+    }
+
+    td:first-child {
+      font-weight: 800;
+      color: #ffffff;
+      background: #2a003f;
+    }
+
+    tbody tr {
+      background: var(--row-odd);
+      transition: background 0.15s ease;
+    }
+
+    tbody tr:nth-child(even) {
+      background: var(--row-even);
+    }
+
+    tbody tr:hover {
+      background: var(--row-hover);
+    }
+
+    /* Highlight first row (top of table) */
+    tbody tr:first-child {
+      background: linear-gradient(
+        90deg,
+        rgba(255, 10, 132, 0.8),
+        rgba(58, 0, 90, 0.95)
+      );
+    }
+
+    tbody tr:first-child td:first-child {
+      border-top: 3px solid #ffe4ff;
+    }
+
     .club-name {
       font-weight: 700;
-      color: #38003c;
+      color: #ffffff;
       font-size: 0.95rem;
+      text-align: left;
     }
+
     .stat-number {
-      text-align: center;
       font-variant-numeric: tabular-nums;
-      font-weight: 600;
-      color: #38003c;
+      font-weight: 700;
+      color: #ffe4ff;
     }
+
     .form-indicator {
       display: inline-block;
       width: 1.4rem;
       height: 1.4rem;
-      border-radius: 2px;
+      border-radius: 3px;
       text-align: center;
       line-height: 1.4rem;
       font-size: 0.7rem;
       font-weight: 700;
       margin: 0 2px;
     }
-    .form-w { background: #00ff85; color: #38003c; }
-    .form-d { background: #999999; color: #ffffff; }
-    .form-l { background: #e90052; color: #ffffff; }
-    th {
-      font-weight: 700;
-      text-transform: uppercase;
-      font-size: 0.75rem;
-      letter-spacing: 0.1em;
+
+    .form-w {
+      background: #00ff85;
+      color: #12001f;
+    }
+
+    .form-d {
+      background: #858585;
       color: #ffffff;
-      padding: 1rem 1.25rem;
     }
-    tbody tr {
-      background: #ffffff;
-      transition: background 0.2s ease;
-    }
-    tbody tr:nth-child(even) {
-      background: #f9f9f9;
-    }
-    tbody tr:hover {
-      background: #f0e6ff;
-    }
-    tbody tr:first-child {
-      background: linear-gradient(90deg, rgba(0, 255, 133, 0.1), rgba(255, 255, 255, 0));
-    }
-    tbody tr:first-child td {
-      border-top: 3px solid #00ff85;
-      font-weight: 700;
-    }
-    .badge {
-      display: inline-block;
-      padding: 0.25rem 0.75rem;
-      border-radius: 4px;
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      background: #e90052;
-      border: none;
+
+    .form-l {
+      background: #ff335f;
       color: #ffffff;
-      font-weight: 700;
     }
+
     .footer {
       margin-top: 0;
-      padding: 1rem 2rem;
-      font-size: 0.8rem;
-      color: #666666;
+      padding: 0.8rem 2rem 1.1rem;
+      font-size: 0.78rem;
+      color: #f2cfff;
       text-align: right;
-      background: #f4f4f4;
-      border-top: 1px solid #e0e0e0;
-      font-weight: 600;
+      background: #12001f;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      font-weight: 500;
     }
+
     .error {
-      margin: 1rem 2rem;
-      color: #e90052;
+      margin: 0.75rem 2rem 1.5rem;
+      color: #ff7da8;
       font-size: 0.9rem;
       text-align: center;
       font-weight: 600;
+    }
+
+    @media (max-width: 720px) {
+      h1 {
+        font-size: 1.6rem;
+        padding-inline: 1.4rem;
+      }
+      .subtitle,
+      .footer,
+      .error {
+        padding-inline: 1.4rem;
+      }
     }
   </style>
 </head>
@@ -162,7 +233,7 @@
   <div class="container">
     <h1>League Stats</h1>
     <p class="subtitle">
-      Live stats synced from the league spreadsheet
+      <span>Live standings from the league spreadsheet</span>
       <span class="badge">Auto-updating</span>
     </p>
 
@@ -178,7 +249,72 @@
   </div>
 
   <script>
-    const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR2zHnWn0w2AZ2TpbBniTby96VlZuU0pwk35nUD1XFmoRd8eVHLUaQd3To1a0c-jQ/pub?gid=850902682&single=true&output=csv"; // <- paste your published CSV link here
+    const CSV_URL =
+      "https://docs.google.com/spreadsheets/d/e/2PACX-1vR2zHnWn0w2AZ2TpbBniTby96VlZuU0pwk35nUD1XFmoRd8eVHLUaQd3To1a0c-jQ/pub?gid=850902682&single=true&output=csv";
+
+    // Multiple CORS proxies as fallbacks
+    const PROXY_URLS = [
+      "https://api.allorigins.win/raw?url=",
+      "https://corsproxy.io/?",
+      "https://api.codetabs.com/v1/proxy?quest="
+    ];
+
+    // Fetch with timeout
+    async function fetchWithTimeout(url, timeout = 10000) {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), timeout);
+
+      try {
+        const response = await fetch(url, { signal: controller.signal });
+        clearTimeout(timeoutId);
+        return response;
+      } catch (error) {
+        clearTimeout(timeoutId);
+        throw error;
+      }
+    }
+
+    // Try fetching with multiple proxies
+    async function fetchCSVWithFallback() {
+      // Cache bust only every 5 minutes instead of every load
+      const cacheBuster = Math.floor(Date.now() / (5 * 60 * 1000));
+      const csvUrlWithCache = CSV_URL + "&t=" + cacheBuster;
+
+      let lastError;
+
+      for (let i = 0; i < PROXY_URLS.length; i++) {
+        const proxyUrl = PROXY_URLS[i];
+        const fullUrl = proxyUrl + encodeURIComponent(csvUrlWithCache);
+
+        try {
+          console.log(`Attempting proxy ${i + 1}/${PROXY_URLS.length}: ${proxyUrl}`);
+          const response = await fetchWithTimeout(fullUrl, 10000);
+
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+          }
+
+          const csvText = await response.text();
+
+          if (!csvText || csvText.trim().length === 0) {
+            throw new Error("Empty response");
+          }
+
+          console.log(`Success with proxy ${i + 1}`);
+          return csvText;
+        } catch (error) {
+          console.warn(`Proxy ${i + 1} failed:`, error.message);
+          lastError = error;
+
+          // Wait a bit before trying next proxy
+          if (i < PROXY_URLS.length - 1) {
+            await new Promise(resolve => setTimeout(resolve, 500));
+          }
+        }
+      }
+
+      throw new Error(`All proxies failed. Last error: ${lastError.message}`);
+    }
 
     async function loadStats() {
       const errorEl = document.getElementById("error-message");
@@ -189,23 +325,15 @@
       errorEl.textContent = "";
       tableHead.innerHTML = "";
       tableBody.innerHTML = "";
+      lastUpdatedEl.textContent = "Loading data...";
 
       try {
-        // Use a CORS proxy to avoid cross-origin issues when opening file locally
-        const proxyUrl = "https://api.allorigins.win/raw?url=";
-        const fullUrl = proxyUrl + encodeURIComponent(CSV_URL + "&t=" + Date.now());
+        const csvText = await fetchCSVWithFallback();
 
-        const response = await fetch(fullUrl);
-        if (!response.ok) {
-          throw new Error("Network response was not ok (Status: " + response.status + ")");
-        }
-        const csvText = await response.text();
-
-        // Simple CSV parsing assuming no commas inside values
         const rows = csvText
           .trim()
           .split("\n")
-          .map(row => row.split(","));
+          .map((row) => row.split(","));
 
         if (rows.length === 0) {
           errorEl.textContent = "No data found in the sheet.";
@@ -215,37 +343,30 @@
         const headers = rows[0];
         const dataRows = rows.slice(1);
 
-        // Build header row
         const headerRow = document.createElement("tr");
-        headers.forEach(h => {
+        headers.forEach((h) => {
           const th = document.createElement("th");
           th.textContent = h.trim();
           headerRow.appendChild(th);
         });
         tableHead.appendChild(headerRow);
 
-        // Build data rows
-        dataRows.forEach(row => {
-          if (row.length === 1 && row[0].trim() === "") return; // skip empty
+        dataRows.forEach((row) => {
+          if (row.length === 1 && row[0].trim() === "") return;
           const tr = document.createElement("tr");
           row.forEach((cell, index) => {
             const td = document.createElement("td");
             let value = cell.trim();
             const header = headers[index].trim().toLowerCase();
 
-            // Position column (first column) - already styled via CSS
             if (index === 0) {
               td.textContent = value;
-            }
-            // Club column (second column)
-            else if (index === 1) {
+            } else if (index === 1) {
               td.className = "club-name";
               td.textContent = value;
-            }
-            // Form column (last column) - display as colored indicators
-            else if (header === "form" || header === "last 5") {
+            } else if (header === "form" || header === "last 5") {
               const formChars = value.split("");
-              formChars.forEach(char => {
+              formChars.forEach((char) => {
                 const span = document.createElement("span");
                 span.className = "form-indicator";
                 const upperChar = char.toUpperCase();
@@ -255,14 +376,10 @@
                 span.textContent = upperChar;
                 td.appendChild(span);
               });
-            }
-            // Number columns - align right
-            else if (!isNaN(value) && value !== "") {
+            } else if (!isNaN(value) && value !== "") {
               td.className = "stat-number";
               td.textContent = value;
-            }
-            // Other columns
-            else {
+            } else {
               td.textContent = value;
             }
 
@@ -272,13 +389,13 @@
         });
 
         const now = new Date();
-        lastUpdatedEl.textContent =
-          "Last refreshed: " + now.toLocaleString();
-
+        lastUpdatedEl.textContent = "Last refreshed: " + now.toLocaleString();
       } catch (err) {
         console.error("Detailed error:", err);
         errorEl.textContent =
-          "Error: " + err.message + " - Check your CSV link and sharing settings. See console for details.";
+          "Error: " +
+          err.message +
+          " - Check your CSV link and sharing settings. See console for details.";
       }
     }
 
