@@ -5,100 +5,166 @@
   <title>Player Stats</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
+    :root {
+      --bg-deep: #050014;
+      --bg-mid: #1a0030;
+      --bg-top: #38003c;
+      --accent: #e90052;
+      --accent-soft: #ff4fa3;
+      --table-header: #ff0a84;
+      --row-even: #17002a;
+      --row-odd: #21003d;
+      --row-hover: #3a005a;
+      --text-main: #ffffff;
+    }
+
     body {
-      font-family: "PremierSans", -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
-      background: linear-gradient(135deg, #38003c 0%, #00ff85 100%);
+      font-family: "PremierSans", -apple-system, BlinkMacSystemFont, "Segoe UI",
+        "Helvetica Neue", Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, #5b008f 0, transparent 40%),
+        radial-gradient(circle at bottom right, #ff007f33 0, transparent 55%),
+        linear-gradient(135deg, var(--bg-top) 0%, var(--bg-deep) 60%, #000000 100%);
       margin: 0;
-      padding: 2rem 1rem;
-      color: #ffffff;
+      padding: 2.5rem 1.25rem;
+      color: var(--text-main);
       display: flex;
       justify-content: center;
       min-height: 100vh;
     }
+
     .container {
       width: 100%;
-      max-width: 1000px;
-      background: #ffffff;
-      border-radius: 0;
+      max-width: 1200px;
+      background: rgba(10, 0, 30, 0.96);
+      border-radius: 16px;
       padding: 0;
-      box-shadow: 0 8px 40px rgba(0,0,0,0.2);
-      border: none;
+      box-shadow: 0 22px 70px rgba(0, 0, 0, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      overflow: hidden;
     }
+
     h1 {
       margin: 0;
-      padding: 1.5rem 2rem;
+      padding: 1.6rem 2rem;
       text-align: left;
-      letter-spacing: -0.02em;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
-      font-size: 2rem;
+      font-size: 1.9rem;
       font-weight: 900;
-      background: linear-gradient(135deg, #38003c 0%, #e90052 100%);
+      background: linear-gradient(135deg, var(--table-header), var(--bg-top));
       color: #ffffff;
-      border-bottom: 4px solid #00ff85;
+      border-bottom: 3px solid #ffd4f0;
     }
+
     .subtitle {
-      text-align: center;
-      margin-bottom: 0;
-      padding: 1rem 2rem;
+      text-align: left;
+      padding: 0.9rem 2rem 1.1rem;
       font-size: 0.9rem;
-      color: #38003c;
-      background: #f4f4f4;
-      border-bottom: 1px solid #e0e0e0;
+      color: #f8def9;
+      background: rgba(10, 0, 30, 0.92);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
       font-weight: 600;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
     }
+
+    .badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      background: #21003d;
+      color: #ffd4f0;
+      border: 1px solid rgba(255, 255, 255, 0.35);
+    }
+
     .table-wrapper {
       overflow-x: auto;
-      border-radius: 0;
-      border: none;
-      background: #ffffff;
+      background: transparent;
     }
+
     table {
       width: 100%;
       border-collapse: collapse;
       min-width: 600px;
     }
+
     thead {
-      background: #38003c;
+      background: var(--table-header);
       position: sticky;
       top: 0;
       z-index: 1;
     }
-    th, td {
-      padding: 1rem 1.25rem;
-      text-align: left;
-      font-size: 0.9rem;
-      border-bottom: 1px solid #e0e0e0;
+
+    th,
+    td {
+      padding: 0.9rem 1.2rem;
+      text-align: center;
+      font-size: 0.88rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
       white-space: nowrap;
+      color: #f9e8ff;
     }
-    td:first-child {
+
+    th {
       font-weight: 700;
-      color: #38003c;
+      text-transform: uppercase;
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      color: #ffffff;
+    }
+
+    th:first-child,
+    td:first-child {
+      text-align: center;
+    }
+
+    td:first-child {
+      font-weight: 800;
+      color: #ffffff;
+      background: #2a003f;
+    }
+
+    td:nth-child(2) {
+      text-align: left;
+      font-weight: 700;
+      color: #ffffff;
       font-size: 0.95rem;
     }
-    .rank {
-      display: inline-block;
-      width: 2rem;
-      height: 2rem;
-      border-radius: 50%;
-      background: #e90052;
-      border: none;
-      color: #ffffff;
-      text-align: center;
-      line-height: 2rem;
-      font-size: 0.85rem;
-      font-weight: 700;
-      margin-right: 0.75rem;
+
+    tbody tr {
+      background: var(--row-odd);
+      transition: background 0.15s ease;
     }
-    .rank.top3 {
-      background: #00ff85;
-      color: #38003c;
-      font-weight: 900;
-      font-size: 0.9rem;
+
+    tbody tr:nth-child(even) {
+      background: var(--row-even);
     }
-    .player-cell {
-      display: flex;
-      align-items: center;
+
+    tbody tr:hover {
+      background: var(--row-hover);
     }
+
+    tbody tr:nth-child(1),
+    tbody tr:nth-child(2),
+    tbody tr:nth-child(3) {
+      background: linear-gradient(
+        90deg,
+        rgba(255, 10, 132, 0.8),
+        rgba(58, 0, 90, 0.95)
+      );
+    }
+
+    tbody tr:first-child td:first-child {
+      border-top: 3px solid #ffe4ff;
+    }
+
     .team-badge {
       display: inline-block;
       padding: 0.3rem 0.75rem;
@@ -108,84 +174,53 @@
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
-    .team-red { background: #e90052; color: #ffffff; border: none; }
-    .team-blue { background: #38003c; color: #ffffff; border: none; }
-    .team-black { background: #000000; color: #ffffff; border: none; }
+
+    .team-red { background: #e90052; color: #ffffff; }
+    .team-blue { background: #38003c; color: #ffffff; }
+    .team-black { background: #000000; color: #ffffff; }
     .team-white { background: #ffffff; color: #38003c; border: 2px solid #38003c; }
+
     .stat-number {
-      text-align: center;
       font-variant-numeric: tabular-nums;
       font-weight: 700;
-      color: #38003c;
-      font-size: 0.95rem;
+      color: #ffe4ff;
     }
+
     .stat-highlight {
-      color: #e90052;
+      color: #00ff85;
       font-weight: 900;
-      font-size: 1.1rem;
+      font-size: 1.05rem;
     }
-    th {
-      font-weight: 700;
-      text-transform: uppercase;
-      font-size: 0.75rem;
-      letter-spacing: 0.1em;
-      color: #ffffff;
-      text-align: center;
-      padding: 1rem 1.25rem;
-    }
-    th:first-child {
-      text-align: left;
-    }
-    tbody tr {
-      background: #ffffff;
-      transition: background 0.2s ease;
-    }
-    tbody tr:nth-child(even) {
-      background: #f9f9f9;
-    }
-    tbody tr:hover {
-      background: #f0e6ff;
-    }
-    tbody tr:first-child {
-      background: linear-gradient(90deg, rgba(0, 255, 133, 0.15), rgba(255, 255, 255, 0));
-    }
-    tbody tr:first-child td {
-      border-top: 3px solid #00ff85;
-    }
-    tbody tr:nth-child(2) {
-      background: linear-gradient(90deg, rgba(0, 255, 133, 0.1), rgba(255, 255, 255, 0));
-    }
-    tbody tr:nth-child(3) {
-      background: linear-gradient(90deg, rgba(0, 255, 133, 0.05), rgba(255, 255, 255, 0));
-    }
-    .badge {
-      display: inline-block;
-      padding: 0.25rem 0.75rem;
-      border-radius: 4px;
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      background: #e90052;
-      border: none;
-      color: #ffffff;
-      font-weight: 700;
-    }
+
     .footer {
       margin-top: 0;
-      padding: 1rem 2rem;
-      font-size: 0.8rem;
-      color: #666666;
+      padding: 0.8rem 2rem 1.1rem;
+      font-size: 0.78rem;
+      color: #f2cfff;
       text-align: right;
-      background: #f4f4f4;
-      border-top: 1px solid #e0e0e0;
-      font-weight: 600;
+      background: #12001f;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      font-weight: 500;
     }
+
     .error {
-      margin: 1rem 2rem;
-      color: #e90052;
+      margin: 0.75rem 2rem 1.5rem;
+      color: #ff7da8;
       font-size: 0.9rem;
       text-align: center;
       font-weight: 600;
+    }
+
+    @media (max-width: 720px) {
+      h1 {
+        font-size: 1.6rem;
+        padding-inline: 1.4rem;
+      }
+      .subtitle,
+      .footer,
+      .error {
+        padding-inline: 1.4rem;
+      }
     }
   </style>
 </head>
@@ -193,7 +228,7 @@
   <div class="container">
     <h1>Player Stats</h1>
     <p class="subtitle">
-      Top scorers ranked by goals
+      <span>Top scorers ranked by Goals + Assists</span>
       <span class="badge">Auto-updating</span>
     </p>
 
@@ -209,151 +244,147 @@
   </div>
 
   <script>
-    // Google Sheets CSV export of the tab that has both tables
     const CSV_URL =
-      "https://docs.google.com/spreadsheets/d/e/2PACX-1vR2zHnWn0w2AZ2TpbBniTby96VlZuU0pwk35nUD1XFmoRd8eVHLUaQd3To1a0c-jQ/pub?gid=304346052&single=true&output=csv";
-  
-    // columns for the RIGHT table: Player, Team, Goals, Assists, G + A
-    const START_COL = 6;  // column G (0-based index)
-    const END_COL   = 11; // column K (exclusive)
-  
+      "https://docs.google.com/spreadsheets/d/e/2PACX-1vR2zHnWn0w2AZ2TpbBniTby96VlZuU0pwk35nUD1XFmoRd8eVHLUaQd3To1a0c-jQ/pub?gid=1385558400&single=true&output=csv";
+
     async function loadStats() {
       const errorEl = document.getElementById("error-message");
       const tableHead = document.querySelector("#stats-table thead");
       const tableBody = document.querySelector("#stats-table tbody");
       const lastUpdatedEl = document.getElementById("last-updated");
-  
+
       errorEl.textContent = "";
       tableHead.innerHTML = "";
       tableBody.innerHTML = "";
-  
+      lastUpdatedEl.textContent = "Loading data...";
+
       try {
-        // CORS proxy so it works when opened locally
         const proxyUrl = "https://api.allorigins.win/raw?url=";
         const fullUrl = proxyUrl + encodeURIComponent(CSV_URL + "&t=" + Date.now());
-  
+
         const response = await fetch(fullUrl);
         if (!response.ok) {
           throw new Error("Network response was not ok (Status: " + response.status + ")");
         }
         const csvText = await response.text();
-  
-        // Basic CSV parse (works since your sheet has simple values)
-        const rows = csvText
-          .trim()
-          .split("\n")
-          .map(row => row.split(","));
-  
+
+        // Parse CSV properly handling line breaks
+        const lines = csvText.trim().split(/\r?\n/);
+        const rows = lines.map(line => {
+          const cells = [];
+          let current = '';
+          let inQuotes = false;
+
+          for (let i = 0; i < line.length; i++) {
+            const char = line[i];
+            if (char === '"') {
+              inQuotes = !inQuotes;
+            } else if (char === ',' && !inQuotes) {
+              cells.push(current.trim());
+              current = '';
+            } else if (char !== '\r') {
+              current += char;
+            }
+          }
+          cells.push(current.trim());
+          return cells;
+        });
+
         if (rows.length === 0) {
           errorEl.textContent = "No data found in the sheet.";
           return;
         }
-  
-        // 1) Find the header row for the RIGHT table (Player | Team | Goals | Assists | G + A)
-        let headerRowIndex = rows.findIndex(row =>
-          row[START_COL] &&
-          row[START_COL].trim().toLowerCase() === "player" &&
-          row[START_COL + 1] &&
-          row[START_COL + 1].trim().toLowerCase() === "team"
-        );
-  
-        // fallback: if not found for some reason, use first row
-        if (headerRowIndex === -1) headerRowIndex = 0;
-  
-        const headerCells = rows[headerRowIndex].slice(START_COL, END_COL);
-        const headers = ["Rank", ...headerCells.map(h => h.trim())];
-  
-        // 2) Collect only the continuous block under that header
+
+        // First row is header
+        const headers = ["Rank", ...rows[0]];
+
+        // Collect data rows (skip header)
         const dataRows = [];
-        for (let i = headerRowIndex + 1; i < rows.length; i++) {
-          const slice = rows[i].slice(START_COL, END_COL);
-  
-          // stop if we hit a fully empty row (end of the table)
-          if (slice.every(cell => !cell || cell.trim() === "")) break;
-  
-          // skip rows with no player name
-          if (!slice[0] || slice[0].trim() === "") continue;
-  
-          // skip Google Sheets error values (#VALUE!, #REF!, etc.)
-          if (slice.some(cell => cell && cell.includes("#"))) continue;
-  
-          dataRows.push(slice);
+        for (let i = 1; i < rows.length; i++) {
+          const row = rows[i];
+
+          // Stop if we hit a fully empty row
+          if (row.every(cell => !cell || cell.trim() === "")) break;
+
+          // Skip rows with no player name
+          if (!row[0] || row[0].trim() === "") continue;
+
+          dataRows.push(row);
         }
-  
+
         if (dataRows.length === 0) {
-          errorEl.textContent = "No valid player rows found in the right-hand table.";
+          errorEl.textContent = "No valid player rows found.";
           return;
         }
-  
-        // 3) Build header row
-        const headerRow = document.createElement("tr");
+
+        // Sort by G+A (column index 4) in descending order
+        dataRows.sort((a, b) => {
+          const aValue = parseFloat(a[4]) || 0;
+          const bValue = parseFloat(b[4]) || 0;
+          return bValue - aValue;
+        });
+
+        // Build header row
+        const headerTr = document.createElement("tr");
         headers.forEach(h => {
           const th = document.createElement("th");
           th.textContent = h;
-          headerRow.appendChild(th);
+          headerTr.appendChild(th);
         });
-        tableHead.appendChild(headerRow);
-  
-        // 4) Build data rows with Rank + styling
+        tableHead.appendChild(headerTr);
+
+        // Build data rows
         dataRows.forEach((row, rowIndex) => {
           const tr = document.createElement("tr");
-  
+
           // Rank column
           const rankTd = document.createElement("td");
-          const rankSpan = document.createElement("span");
-          rankSpan.className = rowIndex < 3 ? "rank top3" : "rank";
-          rankSpan.textContent = rowIndex + 1;
-          const playerCellDiv = document.createElement("div");
-          playerCellDiv.className = "player-cell";
-          playerCellDiv.appendChild(rankSpan);
-          playerCellDiv.appendChild(document.createTextNode(row[0].trim())); // Player
-          rankTd.appendChild(playerCellDiv);
+          rankTd.textContent = rowIndex + 1;
           tr.appendChild(rankTd);
-  
-          // Team, Goals, Assists, G + A
-          row.slice(1).forEach((cell, index) => {
+
+          // Player, Team, Goals, Assists, G+A
+          row.forEach((cell, index) => {
             const td = document.createElement("td");
             const value = (cell || "").trim();
-  
+
             if (index === 0) {
+              // Player name
+              td.textContent = value;
+            } else if (index === 1) {
               // Team badge
               const teamBadge = document.createElement("span");
               teamBadge.className = "team-badge";
               const teamLower = value.toLowerCase();
-              if (teamLower === "red")   teamBadge.className += " team-red";
-              if (teamLower === "blue")  teamBadge.className += " team-blue";
+              if (teamLower === "red") teamBadge.className += " team-red";
+              if (teamLower === "blue") teamBadge.className += " team-blue";
               if (teamLower === "black") teamBadge.className += " team-black";
               if (teamLower === "white") teamBadge.className += " team-white";
               teamBadge.textContent = value;
               td.appendChild(teamBadge);
-              td.style.textAlign = "center";
-            } else if (!isNaN(value) && value !== "") {
-              // Numeric stats
-              td.className = "stat-number";
-              // last column (G + A) is highlighted
-              if (index === 3) td.className += " stat-highlight";
-              td.textContent = value;
             } else {
+              // Numeric stats (Goals, Assists, G+A)
+              td.className = "stat-number";
+              // Highlight G+A column (index 4)
+              if (index === 4) td.className += " stat-highlight";
               td.textContent = value;
             }
-  
+
             tr.appendChild(td);
           });
-  
+
           tableBody.appendChild(tr);
         });
-  
+
         const now = new Date();
         lastUpdatedEl.textContent = "Last refreshed: " + now.toLocaleString();
       } catch (err) {
         console.error("Detailed error:", err);
-        const errorEl = document.getElementById("error-message");
         errorEl.textContent =
-          "Error: " + err.message + " - Check your CSV link and sharing settings. See console for details.";
+          "Error: " + err.message + " - Check your CSV link and sharing settings.";
       }
     }
-  
+
     document.addEventListener("DOMContentLoaded", loadStats);
-  </script>  
+  </script>
 </body>
 </html>
