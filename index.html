@@ -275,6 +275,12 @@
         <h2>Player Stats</h2>
         <p>Top scorers, assist leaders, and total G+A rankings across all teams.</p>
       </a>
+
+      <a href="PlayerOfTheWeek.html" class="nav-card">
+        <div class="nav-card-icon">🌟</div>
+        <h2>Player of the Week</h2>
+        <p id="potw-preview">Recognizing standout weekly performances.</p>
+      </a>
     </div>
 
     <div class="footer">
@@ -289,5 +295,44 @@
       </div>
     </div>
   </div>
+
+  <script>
+    async function loadLatestPOTW() {
+      const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR2zHnWn0w2AZ2TpbBniTby96VlZuU0pwk35nUD1XFmoRd8eVHLUaQd3To1a0c-jQ/pub?gid=1171657962&single=true&output=csv";
+      const previewEl = document.getElementById('potw-preview');
+
+      try {
+        const proxyUrl = "https://api.allorigins.win/raw?url=";
+        const response = await fetch(proxyUrl + encodeURIComponent(CSV_URL));
+        if (!response.ok) return;
+
+        const csvText = await response.text();
+        const lines = csvText.trim().split(/\r?\n/);
+        const rows = lines.map(line => {
+          const cells = [];
+          let current = '', inQuotes = false;
+          for (let char of line) {
+            if (char === '"') inQuotes = !inQuotes;
+            else if (char === ',' && !inQuotes) {
+              cells.push(current.trim());
+              current = '';
+            } else if (char !== '\r') current += char;
+          }
+          cells.push(current.trim());
+          return cells;
+        });
+
+        const dataRows = rows.slice(1).filter(row => row[0] && row[0].trim());
+        if (dataRows.length) {
+          const latestPlayer = dataRows[dataRows.length - 1][0];
+          previewEl.textContent = `Latest Winner: ${latestPlayer}`;
+        }
+      } catch (err) {
+        console.error("Error loading POTW:", err);
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", loadLatestPOTW);
+  </script>
 </body>
 </html>

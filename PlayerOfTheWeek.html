@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Player of the Week</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg-deep: #050014;
+      --bg-mid: #1a0030;
+      --bg-top: #38003c;
+      --accent: #e90052;
+      --accent-soft: #ff4fa3;
+      --table-header: #ff0a84;
+      --text-main: #ffffff;
+    }
+
+    body {
+      font-family: "PremierSans", -apple-system, BlinkMacSystemFont, "Segoe UI",
+        "Helvetica Neue", Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, #5b008f 0, transparent 40%),
+        radial-gradient(circle at bottom right, #ff007f33 0, transparent 55%),
+        linear-gradient(135deg, var(--bg-top) 0%, var(--bg-deep) 60%, #000000 100%);
+      margin: 0;
+      padding: 2.5rem 1.25rem;
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      background: rgba(10, 0, 30, 0.96);
+      border-radius: 16px;
+      padding: 0;
+      box-shadow: 0 22px 70px rgba(0, 0, 0, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      overflow: hidden;
+    }
+
+    h1 {
+      margin: 0;
+      padding: 1.6rem 2rem;
+      text-align: left;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 1.9rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--table-header), var(--bg-top));
+      color: #ffffff;
+      border-bottom: 3px solid #ffd4f0;
+    }
+
+    .subtitle {
+      text-align: left;
+      padding: 0.9rem 2rem 1.1rem;
+      font-size: 0.9rem;
+      color: #f8def9;
+      background: rgba(10, 0, 30, 0.92);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      font-weight: 600;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      background: #21003d;
+      color: #ffd4f0;
+      border: 1px solid rgba(255, 255, 255, 0.35);
+    }
+
+    .content-wrapper {
+      padding: 2rem;
+    }
+
+    .player-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .player-card {
+      background: linear-gradient(135deg, rgba(33, 0, 61, 0.95), rgba(23, 0, 42, 0.95));
+      border-radius: 12px;
+      padding: 2rem;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      transition: all 0.3s ease;
+    }
+
+    .player-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(233, 0, 82, 0.3);
+    }
+
+    .player-card.latest {
+      background: linear-gradient(135deg, rgba(255, 10, 132, 0.25), rgba(58, 0, 90, 0.95));
+      border: 2px solid #00ff85;
+      box-shadow: 0 12px 48px rgba(0, 255, 133, 0.3);
+    }
+
+    .latest-badge {
+      display: inline-block;
+      padding: 0.4rem 1rem;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      background: #00ff85;
+      color: #000000;
+      font-weight: 800;
+      margin-bottom: 1rem;
+    }
+
+    .player-name {
+      font-size: 2.8rem;
+      font-weight: 900;
+      color: #ffffff;
+      margin-bottom: 1rem;
+      letter-spacing: -0.02em;
+      line-height: 1;
+    }
+
+    .player-meta {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+    }
+
+    .week-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.4rem 0.9rem;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #ffd4f0;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .team-badge {
+      display: inline-block;
+      padding: 0.5rem 1.2rem;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .team-red { background: #e90052; color: #ffffff; }
+    .team-blue { background: #38003c; color: #ffffff; }
+    .team-black { background: #000000; color: #ffffff; }
+    .team-white { background: #ffffff; color: #38003c; border: 2px solid #38003c; }
+
+    .player-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      gap: 1rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .stat-box {
+      text-align: center;
+      background: rgba(0, 0, 0, 0.2);
+      padding: 1rem;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #f0daff;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 900;
+      color: #ffffff;
+    }
+
+    .stat-box.highlight {
+      background: rgba(0, 255, 133, 0.1);
+      border-color: rgba(0, 255, 133, 0.3);
+    }
+
+    .stat-box.highlight .stat-value {
+      color: #00ff85;
+    }
+
+    .footer {
+      margin-top: 0;
+      padding: 0.8rem 2rem 1.1rem;
+      font-size: 0.78rem;
+      color: #f2cfff;
+      text-align: right;
+      background: #12001f;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      font-weight: 500;
+    }
+
+    .error {
+      margin: 2rem;
+      padding: 1.5rem;
+      background: rgba(255, 51, 95, 0.15);
+      border: 1px solid rgba(255, 51, 95, 0.3);
+      border-radius: 8px;
+      color: #ff7da8;
+      font-size: 0.9rem;
+      text-align: center;
+      font-weight: 600;
+    }
+
+    @media (max-width: 720px) {
+      .player-name {
+        font-size: 2rem;
+      }
+      .content-wrapper {
+        padding: 1.25rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Player of the Week</h1>
+    <p class="subtitle">
+      <span>Recognizing standout weekly performances</span>
+      <span class="badge">Auto-updating</span>
+    </p>
+
+    <div class="content-wrapper">
+      <div class="player-list" id="player-list"></div>
+    </div>
+
+    <p class="footer" id="last-updated"></p>
+    <p class="error" id="error-message" style="display: none;"></p>
+  </div>
+
+  <script>
+    const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR2zHnWn0w2AZ2TpbBniTby96VlZuU0pwk35nUD1XFmoRd8eVHLUaQd3To1a0c-jQ/pub?gid=1171657962&single=true&output=csv";
+
+    async function loadPlayers() {
+      const errorEl = document.getElementById("error-message");
+      const playerList = document.getElementById("player-list");
+      const lastUpdatedEl = document.getElementById("last-updated");
+
+      errorEl.style.display = "none";
+      playerList.innerHTML = "";
+      lastUpdatedEl.textContent = "Loading...";
+
+      try {
+        const proxyUrl = "https://api.allorigins.win/raw?url=";
+        const response = await fetch(proxyUrl + encodeURIComponent(CSV_URL + "&t=" + Date.now()));
+        if (!response.ok) throw new Error("Failed to load data");
+
+        const csvText = await response.text();
+        const lines = csvText.trim().split(/\r?\n/);
+
+        // Parse CSV
+        const rows = lines.map(line => {
+          const cells = [];
+          let current = '';
+          let inQuotes = false;
+          for (let char of line) {
+            if (char === '"') inQuotes = !inQuotes;
+            else if (char === ',' && !inQuotes) {
+              cells.push(current.trim());
+              current = '';
+            } else if (char !== '\r') current += char;
+          }
+          cells.push(current.trim());
+          return cells;
+        });
+
+        // Skip header, get data rows
+        const dataRows = rows.slice(1).filter(row => row[0] && row[0].trim());
+        if (!dataRows.length) throw new Error("No player data found");
+
+        // Reverse to show most recent first
+        dataRows.reverse();
+
+        // Build cards
+        dataRows.forEach((row, index) => {
+          const [player, date, week, team, goals, assists, gPlusA] = row;
+
+          const card = document.createElement("div");
+          card.className = "player-card" + (index === 0 ? " latest" : "");
+
+          let html = "";
+          if (index === 0) html += '<div class="latest-badge">⭐ Latest Winner</div>';
+
+          html += `<h2 class="player-name">${player}</h2>`;
+          html += '<div class="player-meta">';
+          if (week) html += `<span class="week-badge">📅 Week ${week}</span>`;
+          if (date) html += `<span class="week-badge">🗓️ ${date}</span>`;
+
+          if (team) {
+            const teamClass = "team-badge team-" + team.toLowerCase();
+            html += `<span class="${teamClass}">${team}</span>`;
+          }
+          html += '</div>';
+
+          html += '<div class="player-stats">';
+          html += `<div class="stat-box"><div class="stat-label">Goals</div><div class="stat-value">${goals || '0'}</div></div>`;
+          html += `<div class="stat-box"><div class="stat-label">Assists</div><div class="stat-value">${assists || '0'}</div></div>`;
+          html += `<div class="stat-box highlight"><div class="stat-label">G + A</div><div class="stat-value">${gPlusA || '0'}</div></div>`;
+          html += '</div>';
+
+          card.innerHTML = html;
+          playerList.appendChild(card);
+        });
+
+        lastUpdatedEl.textContent = "Last refreshed: " + new Date().toLocaleString();
+      } catch (err) {
+        console.error("Error:", err);
+        errorEl.textContent = "Error loading data: " + err.message;
+        errorEl.style.display = "block";
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", loadPlayers);
+  </script>
+</body>
+</html>
