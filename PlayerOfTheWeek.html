@@ -27,7 +27,7 @@
   <script src="js/config.js"></script>
   <script src="js/futsal.js"></script>
   <script>
-    const { el, num, gPlusA, teamBadge, message } = Futsal;
+    const { el, num, gPlusA, teamBadge, message, potwRating, ratingTier } = Futsal;
 
     function meta(p) {
       return el("div", { class: "meta" },
@@ -38,18 +38,23 @@
 
     Futsal.page({
       active: "potw",
-      tabs: ["potw"],
-      render(main, { potw }) {
+      tabs: ["potw", "players"],
+      render(main, { potw, players }) {
+        if (!potw) {
+          main.replaceChildren(message("error", "Couldn't load Player of the Week", "Try refreshing in a minute."));
+          return;
+        }
         if (!potw.length) {
           main.replaceChildren(message("empty", "No Player of the Week yet",
             "The first winner gets announced after week 1. Check back soon."));
           return;
         }
         const [latest, ...past] = [...potw].reverse();
-        const stat = (label, value, hl) =>
+        const stat = (label, value, hl, valueCls) =>
           el("div", { class: "stat" + (hl ? " hl" : "") },
             el("div", { class: "stat-label", text: label }),
-            el("div", { class: "stat-value", text: value }));
+            el("div", { class: "stat-value" + (valueCls ? " " + valueCls : ""), text: value }));
+        const r = potwRating(latest, players);
 
         main.replaceChildren(
           el("article", { class: "feature" },
@@ -59,7 +64,8 @@
             el("div", { class: "stats-row" },
               stat("Goals", num(latest.goals)),
               stat("Assists", num(latest.assists)),
-              stat("G + A", gPlusA(latest), true))),
+              stat("G + A", gPlusA(latest), true),
+              r != null && stat("Rating", r.toFixed(1), false, "r-" + ratingTier(r)))),
 
           !past.length ? "" : el("section", { class: "section" },
             el("div", { class: "section-head" }, el("h2", { text: "Past winners" })),

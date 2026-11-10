@@ -439,10 +439,10 @@ th[aria-sort="ascending"] button::after { content: "↑"; opacity: 1; color: var
 .meta { display: flex; gap: 0.5rem 1rem; flex-wrap: wrap; align-items: center; color: var(--muted); font-weight: 600; }
 .stats-row {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(64px, 1fr));
   gap: 0.75rem;
   margin-top: 1.5rem;
-  max-width: 480px;
+  max-width: 620px;
 }
 .stat {
   background: rgba(0, 0, 0, 0.25);
@@ -455,6 +455,11 @@ th[aria-sort="ascending"] button::after { content: "↑"; opacity: 1; color: var
 .stat-value { font-family: var(--font-display); font-size: 2.2rem; font-weight: 800; line-height: 1.1; }
 .stat.hl { border-color: rgba(31, 224, 143, 0.4); background: rgba(31, 224, 143, 0.08); }
 .stat.hl .stat-value { color: var(--good); }
+/* Rating stat uses the same colour bands as the rating badges */
+.stat-value.r-top  { color: #4d9bff; }
+.stat-value.r-good { color: var(--good); }
+.stat-value.r-ok   { color: var(--warn); }
+.stat-value.r-low  { color: var(--bad); }
 
 .history {
   display: grid;

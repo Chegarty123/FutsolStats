@@ -97,6 +97,7 @@
         goals: ["goals", "goal", "g"],
         assists: ["assists", "assist", "a"],
         ga: ["g+a", "ga", "goals+assists"],
+        rating: ["rating", "latestrating", "matchrating", "weekrating"],
       },
     },
   };
@@ -190,11 +191,23 @@
     const n = parseFloat(String(v ?? "").replace(/[^0-9.\-]/g, ""));
     return Number.isFinite(n) ? n : null;
   };
+  // Colour bands: 9+ blue, 7–8.9 green, 5–6.9 amber, below 5 red.
+  const ratingTier = (r) => (r >= 9 ? "top" : r >= 7 ? "good" : r >= 5 ? "ok" : "low");
   function ratingBadge(v) {
     const r = rating(v);
     if (r == null) return el("span", { class: "rating none", title: "Not rated yet", text: "–" });
-    const tier = r >= 9 ? "top" : r >= 7 ? "good" : r >= 5 ? "ok" : "low";
-    return el("span", { class: "rating " + tier, text: r.toFixed(1) });
+    return el("span", { class: "rating " + ratingTier(r), text: r.toFixed(1) });
+  }
+
+  // A Player of the Week winner's rating: the POTW sheet's own Rating
+  // column if it has one, otherwise the player's Latest Rating from the
+  // player stats sheet (matched by name, ignoring case and spaces).
+  const sameName = (a, b) => String(a).trim().toLowerCase() === String(b).trim().toLowerCase();
+  function potwRating(winner, players) {
+    const own = rating(winner.rating);
+    if (own != null) return own;
+    const p = (players || []).find((x) => sameName(x.player, winner.player));
+    return p ? rating(p.latest) : null;
   }
   const fmtTime = (t) => new Date(t).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
   const fmtDateTime = (t) =>
@@ -328,7 +341,7 @@
   }
 
   window.Futsal = {
-    config: C, el, parseCSV, load, num, signed, gPlusA, rating, ratingBadge, teamBadge,
+    config: C, el, parseCSV, load, num, signed, gPlusA, rating, ratingTier, ratingBadge, potwRating, teamBadge,
     leaders, namesLabel, message, page,
   };
 })();

@@ -54,20 +54,19 @@
       const href = "PlayerStats.html";
       if (!players) return emptyTile(href, label, "Unavailable", "Couldn't load player stats");
       const lead = leaders(players, valueOf);
-      if (!lead) return unit === "rating"
-        ? emptyTile(href, label, "No ratings yet", "Ratings appear after games are scored")
-        : emptyTile(href, label, "No goals yet", "Be the first on the board");
+      if (!lead) return emptyTile(href, label, "No goals yet", "Be the first on the board");
       const team = lead.rows.length === 1 && lead.rows[0].team;
-      const shown = unit === "rating" ? `${lead.value.toFixed(1)} avg` : `${lead.value} ${unit}`;
-      return tile(href, label, { text: namesLabel(lead.rows) }, [shown, team && teamBadge(team)]);
+      return tile(href, label, { text: namesLabel(lead.rows) }, [`${lead.value} ${unit}`, team && teamBadge(team)]);
     }
 
-    function potwTile(potw) {
+    function potwTile(potw, players) {
       const href = "PlayerOfTheWeek.html";
       if (!potw) return emptyTile(href, "Player of the week", "Unavailable", "Couldn't load winners");
       if (!potw.length) return emptyTile(href, "Player of the week", "Not picked yet", "First winner after week 1");
       const p = potw[potw.length - 1];
-      return tile(href, "Player of the week", { text: p.player }, [p.week && `Week ${p.week}`, p.team && teamBadge(p.team)]);
+      const r = Futsal.potwRating(p, players);
+      return tile(href, "Player of the week", { text: p.player },
+        [r != null && Futsal.ratingBadge(r), p.week && `Week ${p.week}`, p.team && teamBadge(p.team)]);
     }
 
     function miniTable(standings) {
@@ -114,8 +113,7 @@
             leaderTile(standings),
             statTile(players, "Top scorer", (p) => num(p.goals), "goals"),
             statTile(players, "Most G+A", gPlusA, "G+A"),
-            statTile(players, "Top rated", (p) => rating(p.season) ?? 0, "rating"),
-            potwTile(potw)),
+            potwTile(potw, players)),
           el("div", { class: "split section" },
             el("div", null,
               el("div", { class: "section-head" }, el("h2", { text: "Table" }), el("a", { href: "standings.html", text: "Full standings →" })),
