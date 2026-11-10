@@ -20,7 +20,7 @@ Edit the Google Sheet. That's it. Google takes up to about 5 minutes to publish 
 The site finds columns **by their header name**, so you can reorder columns. Keep the header names recognisable:
 
 - **Standings tab:** `Position`, `Club`, `MP`, `W`, `D`, `L`, `GF`, `GA`, `GD`, `Pts`, `Form`. Form is a string like `WWDLW`.
-- **Player stats tab:** `Player`, `Team`, `Goals`, `Assists`, `G + A`. If G + A is blank, it's calculated.
+- **Player stats tab:** `Player`, `Team`, `Goals`, `Assists`, `G + A`, `Latest Rating`, `Season Rating`. If G + A is blank, it's calculated. Ratings are out of 10; leave a rating blank if the player hasn't been rated yet (it shows as "–", not 0).
 - **Player of the Week tab:** `Player`, `Date`, `Week`, `Team`, `Goals`, `Assists`, `G + A`. Add one row per week; the last row is the latest winner.
 
 Data ends at the first completely blank row, so notes can go below a gap.

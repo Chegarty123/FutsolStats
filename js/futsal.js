@@ -83,6 +83,8 @@
         goals: ["goals", "goal", "g"],
         assists: ["assists", "assist", "a"],
         ga: ["g+a", "ga", "goals+assists"],
+        latest: ["latestrating", "lastrating", "latest", "matchrating"],
+        season: ["seasonrating", "avgrating", "averagerating", "rating"],
       },
     },
     potw: {
@@ -183,6 +185,17 @@
   };
   const signed = (v) => (num(v) > 0 ? "+" + num(v) : String(num(v)));
   const gPlusA = (r) => (r.ga !== "" ? num(r.ga) : num(r.goals) + num(r.assists));
+  // Game ratings: a blank cell means "not rated yet" (null), never 0.
+  const rating = (v) => {
+    const n = parseFloat(String(v ?? "").replace(/[^0-9.\-]/g, ""));
+    return Number.isFinite(n) ? n : null;
+  };
+  function ratingBadge(v) {
+    const r = rating(v);
+    if (r == null) return el("span", { class: "rating none", title: "Not rated yet", text: "–" });
+    const tier = r >= 8 ? "top" : r >= 7 ? "good" : r >= 6 ? "ok" : "low";
+    return el("span", { class: "rating " + tier, text: r.toFixed(1) });
+  }
   const fmtTime = (t) => new Date(t).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
   const fmtDateTime = (t) =>
     new Date(t).toLocaleString([], { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" });
@@ -315,7 +328,7 @@
   }
 
   window.Futsal = {
-    config: C, el, parseCSV, load, num, signed, gPlusA, teamBadge,
+    config: C, el, parseCSV, load, num, signed, gPlusA, rating, ratingBadge, teamBadge,
     leaders, namesLabel, message, page,
   };
 })();

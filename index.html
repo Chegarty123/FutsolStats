@@ -26,18 +26,18 @@
   <script src="js/config.js"></script>
   <script src="js/futsal.js"></script>
   <script>
-    const { el, num, gPlusA, teamBadge, leaders, namesLabel, message, config } = Futsal;
+    const { el, num, gPlusA, rating, teamBadge, leaders, namesLabel, message, config } = Futsal;
     document.getElementById("league-name").textContent = config.leagueName;
 
     function tile(href, label, value, detail) {
       return el("a", { class: "tile", href },
-        el("span", { class: "tile-label", text: label }),
+        el("span", { class: "tile-label", title: label, text: label }),
         value ? el("span", { class: "tile-value", text: value.text }) : null,
         el("span", { class: "tile-detail" }, detail));
     }
     const emptyTile = (href, label, text, detail) =>
       el("a", { class: "tile", href },
-        el("span", { class: "tile-label", text: label }),
+        el("span", { class: "tile-label", title: label, text: label }),
         el("span", { class: "tile-value empty", text }),
         el("span", { class: "tile-detail", text: detail }));
 
@@ -54,9 +54,12 @@
       const href = "PlayerStats.html";
       if (!players) return emptyTile(href, label, "Unavailable", "Couldn't load player stats");
       const lead = leaders(players, valueOf);
-      if (!lead) return emptyTile(href, label, "No goals yet", "Be the first on the board");
+      if (!lead) return unit === "rating"
+        ? emptyTile(href, label, "No ratings yet", "Ratings appear after games are scored")
+        : emptyTile(href, label, "No goals yet", "Be the first on the board");
       const team = lead.rows.length === 1 && lead.rows[0].team;
-      return tile(href, label, { text: namesLabel(lead.rows) }, [`${lead.value} ${unit}`, team && teamBadge(team)]);
+      const shown = unit === "rating" ? `${lead.value.toFixed(1)} avg` : `${lead.value} ${unit}`;
+      return tile(href, label, { text: namesLabel(lead.rows) }, [shown, team && teamBadge(team)]);
     }
 
     function potwTile(potw) {
@@ -92,13 +95,14 @@
       return el("div", { class: "table-wrap" }, el("table", null,
         el("thead", null, el("tr", null,
           el("th", { class: "left", text: "Player" }), el("th", { class: "left hide-xs", text: "Team" }),
-          el("th", { text: "G" }), el("th", { text: "A" }), el("th", { text: "G+A" }))),
+          el("th", { text: "G" }), el("th", { text: "A" }), el("th", { text: "G+A" }), el("th", { class: "hide-xs", title: "Season rating", text: "Rtg" }))),
         el("tbody", null, top.map((p) => el("tr", null,
           el("td", { class: "left name", text: p.player }),
           el("td", { class: "left hide-xs" }, teamBadge(p.team)),
           el("td", { text: num(p.goals) }),
           el("td", { text: num(p.assists) }),
-          el("td", { class: "strong", text: gPlusA(p) }))))));
+          el("td", { class: "strong", text: gPlusA(p) }),
+          el("td", { class: "hide-xs" }, Futsal.ratingBadge(p.season)))))));
     }
 
     Futsal.page({
@@ -109,7 +113,8 @@
           el("div", { class: "tiles" },
             leaderTile(standings),
             statTile(players, "Top scorer", (p) => num(p.goals), "goals"),
-            statTile(players, "Most goal involvements", gPlusA, "G+A"),
+            statTile(players, "Most G+A", gPlusA, "G+A"),
+            statTile(players, "Top rated", (p) => rating(p.season) ?? 0, "rating"),
             potwTile(potw)),
           el("div", { class: "split section" },
             el("div", null,

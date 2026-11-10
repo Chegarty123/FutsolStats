@@ -27,13 +27,15 @@
   <script src="js/config.js"></script>
   <script src="js/futsal.js"></script>
   <script>
-    const { el, num, gPlusA, teamBadge, message } = Futsal;
+    const { el, num, gPlusA, rating, ratingBadge, teamBadge, message } = Futsal;
 
     const SORTS = {
       player: { label: "Player", value: (p) => p.player.toLowerCase(), defaultDir: "asc", cls: "left" },
       goals: { label: "Goals", short: "G", value: (p) => num(p.goals), defaultDir: "desc" },
       assists: { label: "Assists", short: "A", value: (p) => num(p.assists), defaultDir: "desc" },
       ga: { label: "G+A", value: gPlusA, defaultDir: "desc" },
+      latest: { label: "Latest rating", short: "Last", value: (p) => rating(p.latest), defaultDir: "desc" },
+      season: { label: "Season rating", short: "Rtg", value: (p) => rating(p.season), defaultDir: "desc" },
     };
 
     // UI state survives auto-refreshes
@@ -54,7 +56,7 @@
         notice,
         el("div", { class: "controls" }, search, chips, count),
         el("div", { class: "table-wrap" }, el("table", { class: "compact-teams" }, thead, tbody)),
-        el("p", { class: "legend", text: "Ranked by goals + assists. Tap a column to sort." }),
+        el("p", { class: "legend", text: "Ranked by goals + assists. Ratings are out of 10 (latest game and season average); – means not rated yet. Tap a column to sort." }),
       );
       ui = { chips, count, thead, tbody, notice };
     }
@@ -91,7 +93,7 @@
         el("th", { scope: "col", title: "Rank by G+A", text: "#" }),
         sortTh("player"),
         el("th", { scope: "col", class: "left", text: "Team" }),
-        sortTh("goals"), sortTh("assists"), sortTh("ga")));
+        sortTh("goals"), sortTh("assists"), sortTh("ga"), sortTh("latest"), sortTh("season")));
     }
 
     function drawTable() {
@@ -105,13 +107,17 @@
         .filter((p) => !q || p.player.toLowerCase().includes(q))
         .sort((a, b) => {
           const va = s.value(a), vb = s.value(b);
-          if (va !== vb) return (va > vb ? 1 : -1) * dir;
+          if (va !== vb) {
+            if (va == null) return 1; // unrated players always sink to the bottom
+            if (vb == null) return -1;
+            return (va > vb ? 1 : -1) * dir;
+          }
           return gPlusA(b) - gPlusA(a) || num(b.goals) - num(a.goals) || a.player.localeCompare(b.player);
         });
 
       ui.count.textContent = `Showing ${rows.length} of ${players.length} players`;
       if (!rows.length) {
-        ui.tbody.replaceChildren(el("tr", null, el("td", { colspan: 6, class: "muted", text: "No players match that search." })));
+        ui.tbody.replaceChildren(el("tr", null, el("td", { colspan: 8, class: "muted", text: "No players match that search." })));
         return;
       }
       ui.tbody.replaceChildren(...rows.map((p) => {
@@ -122,7 +128,9 @@
           el("td", { class: "left" }, teamBadge(p.team)),
           el("td", { text: num(p.goals) }),
           el("td", { text: num(p.assists) }),
-          el("td", { class: "strong", text: gPlusA(p) }));
+          el("td", { class: "strong", text: gPlusA(p) }),
+          el("td", null, ratingBadge(p.latest)),
+          el("td", null, ratingBadge(p.season)));
       }));
     }
 
