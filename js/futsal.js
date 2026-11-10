@@ -193,7 +193,7 @@
   function ratingBadge(v) {
     const r = rating(v);
     if (r == null) return el("span", { class: "rating none", title: "Not rated yet", text: "–" });
-    const tier = r >= 8 ? "top" : r >= 7 ? "good" : r >= 6 ? "ok" : "low";
+    const tier = r >= 9 ? "top" : r >= 7 ? "good" : r >= 5 ? "ok" : "low";
     return el("span", { class: "rating " + tier, text: r.toFixed(1) });
   }
   const fmtTime = (t) => new Date(t).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
