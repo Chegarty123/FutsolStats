@@ -31,6 +31,16 @@ Data ends at the first completely blank row, so notes can go below a gap.
 2. If you made a new spreadsheet: **File → Share → Publish to web → Entire document → CSV**. Then update `sheet.base` and the `gid` numbers in `js/config.js`. Each tab's `gid` is shown in its URL.
 3. New team colour? Add a line under "Team colours" near the top of `css/styles.css`.
 
+## Publishing code changes
+
+After editing anything in `css/` or `js/`, run this before uploading:
+
+```sh
+node scripts/bump-version.mjs
+```
+
+It updates the `?v=…` tag on the CSS/JS links in every page. Without it, a browser that visited recently can mix a saved copy of an old file with a new page and show "Something went wrong" (GitHub Pages lets browsers reuse files for up to 10 minutes). Editing the Google Sheet doesn't need this.
+
 ## Running it locally
 
 Double-clicking `index.html` **won't load stats**: Google blocks data requests from pages opened as files (`file://`). Serve the folder instead:
