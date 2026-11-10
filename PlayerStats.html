@@ -2,389 +2,153 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Player Stats</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <style>
-    :root {
-      --bg-deep: #050014;
-      --bg-mid: #1a0030;
-      --bg-top: #38003c;
-      --accent: #e90052;
-      --accent-soft: #ff4fa3;
-      --table-header: #ff0a84;
-      --row-even: #17002a;
-      --row-odd: #21003d;
-      --row-hover: #3a005a;
-      --text-main: #ffffff;
-    }
-
-    body {
-      font-family: "PremierSans", -apple-system, BlinkMacSystemFont, "Segoe UI",
-        "Helvetica Neue", Arial, sans-serif;
-      background:
-        radial-gradient(circle at top left, #5b008f 0, transparent 40%),
-        radial-gradient(circle at bottom right, #ff007f33 0, transparent 55%),
-        linear-gradient(135deg, var(--bg-top) 0%, var(--bg-deep) 60%, #000000 100%);
-      margin: 0;
-      padding: 2.5rem 1.25rem;
-      color: var(--text-main);
-      display: flex;
-      justify-content: center;
-      min-height: 100vh;
-    }
-
-    .container {
-      width: 100%;
-      max-width: 1200px;
-      background: rgba(10, 0, 30, 0.96);
-      border-radius: 16px;
-      padding: 0;
-      box-shadow: 0 22px 70px rgba(0, 0, 0, 0.8);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      overflow: hidden;
-    }
-
-    h1 {
-      margin: 0;
-      padding: 1.6rem 2rem;
-      text-align: left;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      font-size: 1.9rem;
-      font-weight: 900;
-      background: linear-gradient(135deg, var(--table-header), var(--bg-top));
-      color: #ffffff;
-      border-bottom: 3px solid #ffd4f0;
-    }
-
-    .subtitle {
-      text-align: left;
-      padding: 0.9rem 2rem 1.1rem;
-      font-size: 0.9rem;
-      color: #f8def9;
-      background: rgba(10, 0, 30, 0.92);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      font-weight: 600;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 0.75rem;
-      flex-wrap: wrap;
-    }
-
-    .badge {
-      display: inline-block;
-      padding: 0.25rem 0.75rem;
-      border-radius: 999px;
-      font-size: 0.65rem;
-      text-transform: uppercase;
-      letter-spacing: 0.09em;
-      background: #21003d;
-      color: #ffd4f0;
-      border: 1px solid rgba(255, 255, 255, 0.35);
-    }
-
-    .table-wrapper {
-      overflow-x: auto;
-      background: transparent;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      min-width: 600px;
-    }
-
-    thead {
-      background: var(--table-header);
-      position: sticky;
-      top: 0;
-      z-index: 1;
-    }
-
-    th,
-    td {
-      padding: 0.9rem 1.2rem;
-      text-align: center;
-      font-size: 0.88rem;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      white-space: nowrap;
-      color: #f9e8ff;
-    }
-
-    th {
-      font-weight: 700;
-      text-transform: uppercase;
-      font-size: 0.7rem;
-      letter-spacing: 0.12em;
-      color: #ffffff;
-    }
-
-    th:first-child,
-    td:first-child {
-      text-align: center;
-    }
-
-    td:first-child {
-      font-weight: 800;
-      color: #ffffff;
-      background: #2a003f;
-    }
-
-    td:nth-child(2) {
-      text-align: left;
-      font-weight: 700;
-      color: #ffffff;
-      font-size: 0.95rem;
-    }
-
-    tbody tr {
-      background: var(--row-odd);
-      transition: background 0.15s ease;
-    }
-
-    tbody tr:nth-child(even) {
-      background: var(--row-even);
-    }
-
-    tbody tr:hover {
-      background: var(--row-hover);
-    }
-
-    tbody tr:nth-child(1),
-    tbody tr:nth-child(2),
-    tbody tr:nth-child(3) {
-      background: linear-gradient(
-        90deg,
-        rgba(255, 10, 132, 0.8),
-        rgba(58, 0, 90, 0.95)
-      );
-    }
-
-    tbody tr:first-child td:first-child {
-      border-top: 3px solid #ffe4ff;
-    }
-
-    .team-badge {
-      display: inline-block;
-      padding: 0.3rem 0.75rem;
-      border-radius: 4px;
-      font-size: 0.75rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    .team-red { background: #e90052; color: #ffffff; }
-    .team-blue { background: #38003c; color: #ffffff; }
-    .team-black { background: #000000; color: #ffffff; }
-    .team-white { background: #ffffff; color: #38003c; border: 2px solid #38003c; }
-
-    .stat-number {
-      font-variant-numeric: tabular-nums;
-      font-weight: 700;
-      color: #ffe4ff;
-    }
-
-    .stat-highlight {
-      color: #00ff85;
-      font-weight: 900;
-      font-size: 1.05rem;
-    }
-
-    .footer {
-      margin-top: 0;
-      padding: 0.8rem 2rem 1.1rem;
-      font-size: 0.78rem;
-      color: #f2cfff;
-      text-align: right;
-      background: #12001f;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
-      font-weight: 500;
-    }
-
-    .error {
-      margin: 0.75rem 2rem 1.5rem;
-      color: #ff7da8;
-      font-size: 0.9rem;
-      text-align: center;
-      font-weight: 600;
-    }
-
-    @media (max-width: 720px) {
-      h1 {
-        font-size: 1.6rem;
-        padding-inline: 1.4rem;
-      }
-      .subtitle,
-      .footer,
-      .error {
-        padding-inline: 1.4rem;
-      }
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Player Stats · Iona Futsal League</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚽</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700;800&display=swap" />
+  <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
-  <div class="container">
-    <h1>Player Stats</h1>
-    <p class="subtitle">
-      <span>Top scorers ranked by Goals + Assists</span>
-      <span class="badge">Auto-updating</span>
-    </p>
+  <header id="site-nav" class="nav"></header>
 
-    <div class="table-wrapper">
-      <table id="stats-table">
-        <thead></thead>
-        <tbody></tbody>
-      </table>
+  <main class="page">
+    <div class="page-head">
+      <div>
+        <p class="eyebrow">Season <span data-season></span></p>
+        <h1>Player Stats</h1>
+      </div>
+      <p id="status" class="status" aria-live="polite"></p>
     </div>
+    <section id="content"></section>
+  </main>
 
-    <p class="footer" id="last-updated"></p>
-    <p class="error" id="error-message"></p>
-  </div>
-
+  <script src="js/config.js"></script>
+  <script src="js/futsal.js"></script>
   <script>
-    const CSV_URL =
-      "https://docs.google.com/spreadsheets/d/e/2PACX-1vR2zHnWn0w2AZ2TpbBniTby96VlZuU0pwk35nUD1XFmoRd8eVHLUaQd3To1a0c-jQ/pub?gid=1385558400&single=true&output=csv";
+    const { el, num, gPlusA, teamBadge, message } = Futsal;
 
-    async function loadStats() {
-      const errorEl = document.getElementById("error-message");
-      const tableHead = document.querySelector("#stats-table thead");
-      const tableBody = document.querySelector("#stats-table tbody");
-      const lastUpdatedEl = document.getElementById("last-updated");
+    const SORTS = {
+      player: { label: "Player", value: (p) => p.player.toLowerCase(), defaultDir: "asc", cls: "left" },
+      goals: { label: "Goals", short: "G", value: (p) => num(p.goals), defaultDir: "desc" },
+      assists: { label: "Assists", short: "A", value: (p) => num(p.assists), defaultDir: "desc" },
+      ga: { label: "G+A", value: gPlusA, defaultDir: "desc" },
+    };
 
-      errorEl.textContent = "";
-      tableHead.innerHTML = "";
-      tableBody.innerHTML = "";
-      lastUpdatedEl.textContent = "Loading data...";
+    // UI state survives auto-refreshes
+    const state = { query: "", team: "all", sort: "ga", dir: "desc", players: [] };
+    let ui = null;
 
-      try {
-        const proxyUrl = "https://api.allorigins.win/raw?url=";
-        const fullUrl = proxyUrl + encodeURIComponent(CSV_URL + "&t=" + Date.now());
-
-        const response = await fetch(fullUrl);
-        if (!response.ok) {
-          throw new Error("Network response was not ok (Status: " + response.status + ")");
-        }
-        const csvText = await response.text();
-
-        // Parse CSV properly handling line breaks
-        const lines = csvText.trim().split(/\r?\n/);
-        const rows = lines.map(line => {
-          const cells = [];
-          let current = '';
-          let inQuotes = false;
-
-          for (let i = 0; i < line.length; i++) {
-            const char = line[i];
-            if (char === '"') {
-              inQuotes = !inQuotes;
-            } else if (char === ',' && !inQuotes) {
-              cells.push(current.trim());
-              current = '';
-            } else if (char !== '\r') {
-              current += char;
-            }
-          }
-          cells.push(current.trim());
-          return cells;
-        });
-
-        if (rows.length === 0) {
-          errorEl.textContent = "No data found in the sheet.";
-          return;
-        }
-
-        // First row is header
-        const headers = ["Rank", ...rows[0]];
-
-        // Collect data rows (skip header)
-        const dataRows = [];
-        for (let i = 1; i < rows.length; i++) {
-          const row = rows[i];
-
-          // Stop if we hit a fully empty row
-          if (row.every(cell => !cell || cell.trim() === "")) break;
-
-          // Skip rows with no player name
-          if (!row[0] || row[0].trim() === "") continue;
-
-          dataRows.push(row);
-        }
-
-        if (dataRows.length === 0) {
-          errorEl.textContent = "No valid player rows found.";
-          return;
-        }
-
-        // Sort by G+A (column index 4) in descending order
-        dataRows.sort((a, b) => {
-          const aValue = parseFloat(a[4]) || 0;
-          const bValue = parseFloat(b[4]) || 0;
-          return bValue - aValue;
-        });
-
-        // Build header row
-        const headerTr = document.createElement("tr");
-        headers.forEach(h => {
-          const th = document.createElement("th");
-          th.textContent = h;
-          headerTr.appendChild(th);
-        });
-        tableHead.appendChild(headerTr);
-
-        // Build data rows
-        dataRows.forEach((row, rowIndex) => {
-          const tr = document.createElement("tr");
-
-          // Rank column
-          const rankTd = document.createElement("td");
-          rankTd.textContent = rowIndex + 1;
-          tr.appendChild(rankTd);
-
-          // Player, Team, Goals, Assists, G+A
-          row.forEach((cell, index) => {
-            const td = document.createElement("td");
-            const value = (cell || "").trim();
-
-            if (index === 0) {
-              // Player name
-              td.textContent = value;
-            } else if (index === 1) {
-              // Team badge
-              const teamBadge = document.createElement("span");
-              teamBadge.className = "team-badge";
-              const teamLower = value.toLowerCase();
-              if (teamLower === "red") teamBadge.className += " team-red";
-              if (teamLower === "blue") teamBadge.className += " team-blue";
-              if (teamLower === "black") teamBadge.className += " team-black";
-              if (teamLower === "white") teamBadge.className += " team-white";
-              teamBadge.textContent = value;
-              td.appendChild(teamBadge);
-            } else {
-              // Numeric stats (Goals, Assists, G+A)
-              td.className = "stat-number";
-              // Highlight G+A column (index 4)
-              if (index === 4) td.className += " stat-highlight";
-              td.textContent = value;
-            }
-
-            tr.appendChild(td);
-          });
-
-          tableBody.appendChild(tr);
-        });
-
-        const now = new Date();
-        lastUpdatedEl.textContent = "Last refreshed: " + now.toLocaleString();
-      } catch (err) {
-        console.error("Detailed error:", err);
-        errorEl.textContent =
-          "Error: " + err.message + " - Check your CSV link and sharing settings.";
-      }
+    function buildUI(main) {
+      const search = el("input", {
+        class: "search", type: "search", placeholder: "Find a player…", "aria-label": "Find a player",
+        oninput: (e) => { state.query = e.target.value; drawTable(); },
+      });
+      const chips = el("div", { class: "chips", role: "group", "aria-label": "Filter by team" });
+      const count = el("span", { class: "count", "aria-live": "polite" });
+      const thead = el("thead");
+      const tbody = el("tbody");
+      const notice = el("div");
+      main.replaceChildren(
+        notice,
+        el("div", { class: "controls" }, search, chips, count),
+        el("div", { class: "table-wrap" }, el("table", { class: "compact-teams" }, thead, tbody)),
+        el("p", { class: "legend", text: "Ranked by goals + assists. Tap a column to sort." }),
+      );
+      ui = { chips, count, thead, tbody, notice };
     }
 
-    document.addEventListener("DOMContentLoaded", loadStats);
+    function drawChips() {
+      const teams = [...new Set(state.players.map((p) => p.team).filter(Boolean))].sort();
+      if (state.team !== "all" && !teams.includes(state.team)) state.team = "all";
+      const chip = (value, child) => el("button", {
+        class: "chip", type: "button", "aria-pressed": String(state.team === value),
+        onclick: () => { state.team = value; drawChips(); drawTable(); },
+      }, child);
+      ui.chips.replaceChildren(chip("all", "All teams"), ...teams.map((t) => chip(t, teamBadge(t))));
+    }
+
+    function drawHead() {
+      const sortTh = (key) => {
+        const s = SORTS[key];
+        const active = state.sort === key;
+        return el("th", {
+          scope: "col", class: s.cls || null,
+          "aria-sort": active ? (state.dir === "asc" ? "ascending" : "descending") : null,
+        }, el("button", {
+          type: "button",
+          onclick: () => {
+            if (state.sort === key) state.dir = state.dir === "asc" ? "desc" : "asc";
+            else { state.sort = key; state.dir = s.defaultDir; }
+            drawHead(); drawTable();
+          },
+        }, s.short
+          ? [el("span", { class: "hide-sm", text: s.label }), el("span", { class: "show-sm", "aria-hidden": "true", text: s.short })]
+          : s.label));
+      };
+      ui.thead.replaceChildren(el("tr", null,
+        el("th", { scope: "col", title: "Rank by G+A", text: "#" }),
+        sortTh("player"),
+        el("th", { scope: "col", class: "left", text: "Team" }),
+        sortTh("goals"), sortTh("assists"), sortTh("ga")));
+    }
+
+    function drawTable() {
+      const { players } = state;
+      const q = state.query.trim().toLowerCase();
+      const s = SORTS[state.sort];
+      const dir = state.dir === "asc" ? 1 : -1;
+
+      const rows = players
+        .filter((p) => state.team === "all" || p.team === state.team)
+        .filter((p) => !q || p.player.toLowerCase().includes(q))
+        .sort((a, b) => {
+          const va = s.value(a), vb = s.value(b);
+          if (va !== vb) return (va > vb ? 1 : -1) * dir;
+          return gPlusA(b) - gPlusA(a) || num(b.goals) - num(a.goals) || a.player.localeCompare(b.player);
+        });
+
+      ui.count.textContent = `Showing ${rows.length} of ${players.length} players`;
+      if (!rows.length) {
+        ui.tbody.replaceChildren(el("tr", null, el("td", { colspan: 6, class: "muted", text: "No players match that search." })));
+        return;
+      }
+      ui.tbody.replaceChildren(...rows.map((p) => {
+        const r = p._rank;
+        return el("tr", { class: r && r <= 3 ? "top" : null },
+          el("td", { class: "rank", text: r || "–" }),
+          el("td", { class: "left name", text: p.player }),
+          el("td", { class: "left" }, teamBadge(p.team)),
+          el("td", { text: num(p.goals) }),
+          el("td", { text: num(p.assists) }),
+          el("td", { class: "strong", text: gPlusA(p) }));
+      }));
+    }
+
+    Futsal.page({
+      active: "players",
+      tabs: ["players"],
+      render(main, { players }) {
+        if (!players.length) {
+          ui = null;
+          main.replaceChildren(message("empty", "No players yet", "Players will show up once they're added to the league sheet."));
+          return;
+        }
+        // Standard competition ranking by G+A (1, 2, 2, 4…); no rank until a player has a goal involvement.
+        const byGA = [...players].sort((a, b) => gPlusA(b) - gPlusA(a));
+        byGA.forEach((p, i) => {
+          const prev = byGA[i - 1];
+          p._rank = gPlusA(p) <= 0 ? null : prev && gPlusA(prev) === gPlusA(p) ? prev._rank : i + 1;
+        });
+        state.players = players;
+
+        if (!ui || !main.contains(ui.thead)) buildUI(main);
+        const anyGoals = players.some((p) => gPlusA(p) > 0);
+        ui.notice.replaceChildren(!anyGoals ? message("info", "No goals yet this season", "Rankings appear once the first goals and assists are logged.") : "");
+        drawChips(); drawHead(); drawTable();
+      },
+    });
   </script>
 </body>
 </html>

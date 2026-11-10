@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Standings · Iona Futsal League</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚽</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700;800&display=swap" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header id="site-nav" class="nav"></header>
+
+  <main class="page">
+    <div class="page-head">
+      <div>
+        <p class="eyebrow">Season <span data-season></span></p>
+        <h1>Standings</h1>
+      </div>
+      <p id="status" class="status" aria-live="polite"></p>
+    </div>
+    <section id="content"></section>
+  </main>
+
+  <script src="js/config.js"></script>
+  <script src="js/futsal.js"></script>
+  <script>
+    const { el, num, signed, teamBadge, message } = Futsal;
+
+    // [field, header label, extra class]
+    const COLUMNS = [
+      ["position", "#", "rank"],
+      ["club", "Club", "left"],
+      ["mp", "MP", ""],
+      ["w", "W", "hide-sm"],
+      ["d", "D", "hide-sm"],
+      ["l", "L", "hide-sm"],
+      ["gf", "GF", "hide-sm"],
+      ["ga", "GA", "hide-sm"],
+      ["gd", "GD", ""],
+      ["pts", "Pts", "strong"],
+      ["form", "Form", "hide-xs"],
+    ];
+    const FORM_NAMES = { W: "Win", D: "Draw", L: "Loss" };
+
+    function formCell(value) {
+      const results = value.toUpperCase().replace(/[^WDL]/g, "").split("");
+      if (!results.length) return el("span", { class: "muted", text: "–" });
+      return el("span", { class: "form", "aria-label": results.map((r) => FORM_NAMES[r]).join(", ") },
+        results.map((r) => el("span", { class: r.toLowerCase(), title: FORM_NAMES[r], text: r })));
+    }
+
+    Futsal.page({
+      active: "standings",
+      tabs: ["standings"],
+      render(main, { standings }) {
+        if (!standings.length) {
+          main.replaceChildren(message("empty", "No teams yet", "Teams will show up here once they're added to the league sheet."));
+          return;
+        }
+        const started = standings.some((t) => num(t.mp) > 0);
+
+        const table = el("table", null,
+          el("thead", null, el("tr", null,
+            COLUMNS.map(([, label, cls]) => el("th", { class: cls.replace("strong", "").replace("rank", "") || null, scope: "col", text: label })))),
+          el("tbody", null, standings.map((team, i) =>
+            el("tr", { class: started && i === 0 ? "leader" : null },
+              COLUMNS.map(([key, , cls]) => {
+                if (key === "club") return el("td", { class: "left name" }, teamBadge(team.club));
+                if (key === "form") return el("td", { class: cls }, formCell(team.form));
+                const text = key === "gd" ? signed(team.gd) : key === "position" ? team.position || i + 1 : team[key] || "0";
+                return el("td", { class: cls || null, text });
+              })))),
+        );
+
+        main.replaceChildren(
+          started ? "" : message("info", "The season hasn't kicked off yet", "The table will fill in after the first match."),
+          el("div", { class: "table-wrap" }, table),
+          el("p", { class: "legend", text: "MP played · W won · D drawn · L lost · GF/GA goals for/against · GD goal difference" }),
+        );
+      },
+    });
+  </script>
+</body>
+</html>
