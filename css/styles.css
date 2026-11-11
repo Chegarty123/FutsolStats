@@ -111,7 +111,23 @@ h2 { font-size: 1.35rem; }
   background: linear-gradient(135deg, var(--accent), #7a1cff);
   font-size: 1.1rem;
 }
-.nav-links { display: flex; gap: 0.25rem; flex-wrap: wrap; }
+.nav-links { display: flex; gap: 0.25rem; flex-wrap: wrap; margin-left: auto; }
+.theme-toggle {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  flex: none;
+  margin-left: -0.75rem;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid var(--line-strong);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.theme-toggle:hover { color: var(--text); background: var(--surface-2); }
 .nav-links a {
   text-decoration: none;
   font-weight: 600;
@@ -459,12 +475,13 @@ th[aria-sort="ascending"] button::after { content: "↑"; opacity: 1; color: var
 .stat.hl { border-color: rgba(31, 224, 143, 0.4); background: rgba(31, 224, 143, 0.08); }
 .stat.hl .stat-value { color: var(--good); }
 /* Rating stat uses the same colour bands as the rating badges */
-.stat-value.r-excellent { color: #374df5; }
-.stat-value.r-verygood  { color: #00adc4; }
-.stat-value.r-good      { color: #00c424; }
-.stat-value.r-average   { color: #d9af00; }
-.stat-value.r-below     { color: #ed7e07; }
-.stat-value.r-poor      { color: #dc0c00; }
+.stat-value.r-excellent { --tier: #374df5; --on-tier: #fff; }
+.stat-value.r-verygood  { --tier: #00adc4; --on-tier: #04252a; }
+.stat-value.r-good      { --tier: #00c424; --on-tier: #03270a; }
+.stat-value.r-average   { --tier: #d9af00; --on-tier: #2a2000; }
+.stat-value.r-below     { --tier: #ed7e07; --on-tier: #2e1700; }
+.stat-value.r-poor      { --tier: #dc0c00; --on-tier: #fff; }
+.stat-value[class*="r-"] { color: var(--tier); }
 
 .history {
   display: grid;
@@ -476,9 +493,100 @@ th[aria-sort="ascending"] button::after { content: "↑"; opacity: 1; color: var
 .history .line { color: var(--muted); font-size: 0.9rem; margin: 0.4rem 0 0; }
 .history .line b { color: var(--text); }
 
+/* ── Light theme: Iona Gaels maroon & gold ──────────────── */
+:root[data-theme="light"] {
+  color-scheme: light;
+  --maroon: #6f2639;
+  --maroon-deep: #4a1726;
+  --gold: #f2a900;
+  --gold-soft: #ffd166;
+  --bg: #f7f3ec;
+  --surface: #ffffff;
+  --surface-2: #f4ede5;
+  --surface-3: #eadfd3;
+  --line: rgba(111, 38, 57, 0.12);
+  --line-strong: rgba(111, 38, 57, 0.24);
+  --text: #241a1d;
+  --muted: #6e6064;
+  --accent: var(--maroon);
+  --accent-2: #9b2f48;
+  --good: #1f9a5a;
+  --draw: #8a8290;
+  --bad: #c8313f;
+  --warn: #e0a000;
+}
+[data-theme="light"] body {
+  background:
+    radial-gradient(1100px 500px at 0% -10%, rgba(111, 38, 57, 0.08), transparent 60%),
+    radial-gradient(900px 500px at 110% 110%, rgba(242, 169, 0, 0.10), transparent 60%),
+    var(--bg);
+  background-attachment: fixed;
+}
+[data-theme="light"] :is(h1, h2, h3) { color: var(--maroon); }
+
+/* Maroon nav bar with a gold stripe */
+[data-theme="light"] .nav {
+  background: linear-gradient(180deg, var(--maroon), var(--maroon-deep));
+  border-bottom: 4px solid var(--gold);
+  box-shadow: 0 2px 10px rgba(74, 23, 38, 0.25);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  color: #fff;
+}
+[data-theme="light"] .brand-ball { background: var(--gold); box-shadow: 0 0 0 2px #fff; }
+[data-theme="light"] .nav-links a { color: rgba(255, 255, 255, 0.82); }
+[data-theme="light"] .nav-links a:hover { color: #fff; background: rgba(255, 255, 255, 0.12); }
+[data-theme="light"] .nav-links a[aria-current="page"] { color: var(--maroon-deep); background: var(--gold); }
+[data-theme="light"] .theme-toggle { color: #fff; border-color: rgba(255, 255, 255, 0.35); }
+[data-theme="light"] .theme-toggle:hover { background: rgba(255, 255, 255, 0.12); }
+[data-theme="light"] .nav :focus-visible { outline-color: var(--gold); }
+
+/* Tables, chips, badges */
+[data-theme="light"] tbody tr:hover { background: rgba(111, 38, 57, 0.035); }
+[data-theme="light"] tr.leader { background: linear-gradient(90deg, rgba(242, 169, 0, 0.22), transparent 70%); }
+[data-theme="light"] tr.leader td:first-child { box-shadow: inset 4px 0 0 var(--gold); }
+[data-theme="light"] .team::before { box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.25); }
+[data-theme="light"] .form .w { color: #fff; }
+[data-theme="light"] .chip[aria-pressed="true"] { background: var(--maroon); color: #fff; border-color: var(--maroon); }
+
+/* Home tiles */
+[data-theme="light"] .tile::after { height: 4px; background: linear-gradient(90deg, var(--maroon) 0 60%, var(--gold) 60%); }
+[data-theme="light"] .tile:hover { box-shadow: 0 6px 18px rgba(74, 23, 38, 0.10); }
+[data-theme="light"] .tile-value:not(.empty) { color: var(--maroon); }
+
+/* Player of the Week: maroon card with gold highlights */
+[data-theme="light"] .feature {
+  --text: #fff;
+  --muted: rgba(255, 255, 255, 0.75);
+  --line: rgba(255, 255, 255, 0.16);
+  color: var(--text);
+  background:
+    radial-gradient(600px 300px at 100% 0%, rgba(242, 169, 0, 0.28), transparent 70%),
+    linear-gradient(135deg, var(--maroon), var(--maroon-deep));
+  border: 0;
+  border-bottom: 5px solid var(--gold);
+}
+[data-theme="light"] .feature h2 { color: #fff; }
+[data-theme="light"] .feature .eyebrow { color: var(--gold-soft); }
+[data-theme="light"] .feature .team::before { box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.55); }
+[data-theme="light"] .stat.hl { border-color: rgba(242, 169, 0, 0.6); background: rgba(242, 169, 0, 0.14); }
+[data-theme="light"] .stat.hl .stat-value { color: var(--gold-soft); }
+/* On maroon, coloured text is hard to read, so the rating becomes a coloured pill */
+[data-theme="light"] .stat-value[class*="r-"] {
+  display: inline-block;
+  padding: 0 0.45rem;
+  margin-top: 0.15rem;
+  border-radius: 8px;
+  background: var(--tier);
+  color: var(--on-tier);
+}
+[data-theme="light"] .history .card { border-top: 4px solid var(--gold); }
+
 /* ── Small screens ──────────────────────────────────────── */
 .show-sm { display: none; }
 @media (max-width: 640px) {
+  .theme-toggle { order: 1; margin-left: auto; }
+  .nav-links { order: 2; margin-left: 0; flex-basis: 100%; }
   .hide-sm { display: none; }
   .show-sm { display: inline; }
   .compact-teams td .team-name { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
