@@ -50,13 +50,13 @@
       return tile(href, "League leader", { text: top.club }, `${num(top.pts)} pts · ${num(top.mp)} played`);
     }
 
-    function statTile(players, label, valueOf, unit) {
+    function statTile(players, label, valueOf, unit, emptyText = "No goals yet") {
       const href = "PlayerStats.html";
       if (!players) return emptyTile(href, label, "Unavailable", "Couldn't load player stats");
       const lead = leaders(players, valueOf);
-      if (!lead) return emptyTile(href, label, "No goals yet", "Be the first on the board");
+      if (!lead) return emptyTile(href, label, emptyText, "Be the first on the board");
       const team = lead.rows.length === 1 && lead.rows[0].team;
-      return tile(href, label, { text: namesLabel(lead.rows) }, [`${lead.value} ${unit}`, team && teamBadge(team)]);
+      return tile(href, label, { text: namesLabel(lead.rows) }, [`${lead.value} ${lead.value === 1 ? unit.replace(/s$/, "") : unit}`, team && teamBadge(team)]);
     }
 
     function potwTile(potw, players) {
@@ -112,7 +112,7 @@
           el("div", { class: "tiles" },
             leaderTile(standings),
             statTile(players, "Top scorer", (p) => num(p.goals), "goals"),
-            statTile(players, "Most G+A", gPlusA, "G+A"),
+            statTile(players, "Most assists", (p) => num(p.assists), "assists", "No assists yet"),
             potwTile(potw, players)),
           el("div", { class: "split section" },
             el("div", null,
