@@ -331,11 +331,14 @@ th[aria-sort="ascending"] button::after { content: "↑"; opacity: 1; color: var
   font-size: 0.9rem;
   text-align: center;
 }
-.rating.top  { background: #1d7bff; color: #fff; }
-.rating.good { background: var(--good); color: #062014; }
-.rating.ok   { background: var(--warn); color: #2a1a00; }
-.rating.low  { background: var(--bad); color: #fff; }
-.rating.none { color: var(--muted); font-weight: 600; }
+/* Sofascore colour scale */
+.rating.excellent { background: #374df5; color: #fff; }
+.rating.verygood  { background: #00adc4; color: #04252a; }
+.rating.good      { background: #00c424; color: #03270a; }
+.rating.average   { background: #d9af00; color: #2a2000; }
+.rating.below     { background: #ed7e07; color: #2e1700; }
+.rating.poor      { background: #dc0c00; color: #fff; }
+.rating.none      { background: #a4a9b3; color: #23262b; }
 
 .legend { margin: 0.75rem 0 0; color: var(--muted); font-size: 0.8rem; }
 
@@ -456,10 +459,12 @@ th[aria-sort="ascending"] button::after { content: "↑"; opacity: 1; color: var
 .stat.hl { border-color: rgba(31, 224, 143, 0.4); background: rgba(31, 224, 143, 0.08); }
 .stat.hl .stat-value { color: var(--good); }
 /* Rating stat uses the same colour bands as the rating badges */
-.stat-value.r-top  { color: #4d9bff; }
-.stat-value.r-good { color: var(--good); }
-.stat-value.r-ok   { color: var(--warn); }
-.stat-value.r-low  { color: var(--bad); }
+.stat-value.r-excellent { color: #374df5; }
+.stat-value.r-verygood  { color: #00adc4; }
+.stat-value.r-good      { color: #00c424; }
+.stat-value.r-average   { color: #d9af00; }
+.stat-value.r-below     { color: #ed7e07; }
+.stat-value.r-poor      { color: #dc0c00; }
 
 .history {
   display: grid;

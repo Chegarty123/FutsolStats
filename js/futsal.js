@@ -189,10 +189,16 @@
   // Game ratings: a blank cell means "not rated yet" (null), never 0.
   const rating = (v) => {
     const n = parseFloat(String(v ?? "").replace(/[^0-9.\-]/g, ""));
-    return Number.isFinite(n) ? n : null;
+    return Number.isFinite(n) ? Math.round(n * 10) / 10 : null; // 1 decimal, like it's shown
   };
-  // Colour bands: 9+ blue, 7–8.9 green, 5–6.9 amber, below 5 red.
-  const ratingTier = (r) => (r >= 9 ? "top" : r >= 7 ? "good" : r >= 5 ? "ok" : "low");
+  // Sofascore-style colour bands (colours live in css/styles.css):
+  //   9.0+ blue · 8.0–8.9 cyan · 7.0–7.9 green · 6.5–6.9 yellow
+  //   6.0–6.4 orange · below 6.0 red · blank = grey
+  // rating() already rounds to 1 decimal, so the colour always matches the number shown.
+  function ratingTier(x) {
+    return x >= 9 ? "excellent" : x >= 8 ? "verygood" : x >= 7 ? "good"
+      : x >= 6.5 ? "average" : x >= 6 ? "below" : "poor";
+  }
   function ratingBadge(v) {
     const r = rating(v);
     if (r == null) return el("span", { class: "rating none", title: "Not rated yet", text: "–" });
